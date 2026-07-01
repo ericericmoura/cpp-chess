@@ -9,6 +9,7 @@
 #include <SFML/System/Vector2.hpp>
 
 #include "StandardGraphicsComponent.h"
+#include "Team.h"
 
 namespace chess {
 
@@ -16,14 +17,22 @@ class Piece : public sf::Transformable, public sf::Drawable
 {
 public:
 	Piece() = default;
-	Piece(const std::string& texture_key, sf::Vector2u starting_pos) noexcept;
+	Piece(Team team, const std::string& texture_key, sf::Vector2u starting_pos) noexcept;
 
 	void SetBoardPosition(sf::Vector2u pos) noexcept;
+	Team GetTeam() const noexcept
+	{
+		return team_;
+	}
+
+	void Capture() noexcept 
+	{};
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
 	StandardGraphicsComponent graphics_{};
+	Team team_{};
 };
 
 }

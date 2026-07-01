@@ -24,9 +24,7 @@ public:
 	inline static const std::string kTextureKey = "graphics/board_alt.png";
 
 	Board();
-
 	void GeneratePieces() noexcept;	
-
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:

@@ -1,6 +1,7 @@
 #include "Piece.h"
 
 #include <string>
+#include <utility>
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -8,13 +9,16 @@
 
 #include "Vector2Operators.h"
 #include "Board.h"
+#include "Team.h"
 
-chess::Piece::Piece(const std::string& texture_key, sf::Vector2u starting_pos) noexcept
-	: graphics_(texture_key)	
+chess::Piece::Piece(Team team, const std::string& texture_key, sf::Vector2u starting_pos) noexcept
+	: graphics_(texture_key)
 {
-	SetBoardPosition(starting_pos);
+	SetBoardPosition(std::move(starting_pos));
 
 	graphics_.CenterOrigin(true);
+
+	team_ = team;
 }
 
 void chess::Piece::SetBoardPosition(sf::Vector2u pos) noexcept

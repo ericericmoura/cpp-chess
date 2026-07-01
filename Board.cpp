@@ -22,11 +22,11 @@ void chess::Board::GeneratePieces() noexcept
 		auto grid_x = i % kBoardSize.x + 1;
 
 		auto position = sf::Vector2u({ grid_x, grid_y });
-		board_.try_emplace(position, chess::Piece("graphics/black_pawn.png", position));
+		board_.try_emplace(position, chess::Piece("graphics/black_knight.png", position));
 
 		auto white_grid_y   = grid_y + 6;
 		auto white_position = sf::Vector2u({ grid_x, white_grid_y });
-		board_.try_emplace(white_position, chess::Piece("graphics/white_pawn.png", white_position));
+		board_.try_emplace(white_position, chess::Piece("graphics/white_bishop.png", white_position));
 	}
 }
 
