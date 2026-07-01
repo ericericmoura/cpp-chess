@@ -28,5 +28,5 @@ namespace sf
 		return sf::Vector2<T>(left.x / right.x, left.y / right.y);
 	}
 
-
+	
 }
