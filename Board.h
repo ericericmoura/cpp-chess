@@ -15,6 +15,8 @@
 
 namespace chess {
 
+using PiecesMap = std::unordered_map<sf::Vector2u, Piece, Vec2uHash>;
+
 class Board : public sf::Transformable, public sf::Drawable
 {
 public:
@@ -26,9 +28,22 @@ public:
 	Board();
 	void GeneratePieces() noexcept;	
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	
+	void SelectPosition(sf::Vector2u position) noexcept;
+	void TryMoveTo(sf::Vector2u target) noexcept;
+
+	static inline sf::Vector2u GetBoardMargin() noexcept
+	{
+		return chess::Board::kMargin + chess::Board::kCellSize / 2u;
+	}
+
+	static sf::Vector2f GetPositionInPixels(sf::Vector2u board_position) noexcept;
+	static sf::Vector2u GetBoardCoordinates(sf::Vector2f position) noexcept;
 
 private:
-	std::unordered_map<sf::Vector2u, Piece, Vec2uHash> board_{};
+	PiecesMap active_pieces_{};
+
+	sf::Vector2u selected_position_{};
 
 	StandardGraphicsComponent graphics_{};
 };

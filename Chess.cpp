@@ -10,7 +10,6 @@
 #include <SFML/Graphics/View.hpp>
 #include <SFML/System/Vector2.hpp>
 
-#include "Piece.h"
 #include "Board.h"
 #include "BitmapStore.h"
 
@@ -43,6 +42,8 @@ int main()
 
 	auto current_window_status = sf::State::Windowed;
 
+	bool moved = false;
+
 	sf::Clock clock{};
 	while (window.isOpen())
 	{
@@ -61,6 +62,15 @@ int main()
 					window.create(video_mode, WindowTitle, current_window_status);
 
 					window.setView(main_camera);
+				}
+				else if (key->scancode == sf::Keyboard::Scancode::E)
+				{
+					board.SelectPosition({1, 2});					
+				}
+				else if (!moved && key->scancode == sf::Keyboard::Scancode::R)
+				{
+					board.TryMoveTo({ 1, 8 });
+					moved = true;
 				}
 			}
 		}
