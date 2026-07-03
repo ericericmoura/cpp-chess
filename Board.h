@@ -13,6 +13,7 @@
 #include "Vector2Hash.h"
 #include "Piece.h"
 #include "StandardGraphicsComponent.h"
+#include "PieceFactory.h"
 
 namespace chess {
 
@@ -43,6 +44,8 @@ public:
 	static bool IsCoordinatesValid(sf::Vector2u position) noexcept;
 
 private:
+	PieceFactory factory_{};
+
 	PiecesMap active_pieces_{};
 	std::vector<Piece> inactive_pieces_{};
 

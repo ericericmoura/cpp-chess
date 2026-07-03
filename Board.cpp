@@ -11,8 +11,6 @@
 
 #include "Piece.h"
 #include "Vector2Operators.h"
-#include "Team.h"
-#include "StraightMovementComponent.h"
 
 chess::Board::Board()
 	: graphics_{kTextureKey}
@@ -21,25 +19,7 @@ chess::Board::Board()
 
 void chess::Board::GeneratePieces() noexcept
 {
-	for (auto i = 0; i < 16; i++)
-	{
-		auto index  = static_cast<float>(i);
-		auto grid_y = static_cast<unsigned int>(floor(index / kBoardSize.x));
-		auto grid_x = i % kBoardSize.x;
-
-		auto position = sf::Vector2u({ grid_x, grid_y });
-
-		auto black_piece = chess::Piece(chess::Team::Black, "graphics/black_rook.png", position);
-		black_piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(chess::Team::Black));
-		active_pieces_.try_emplace(position, std::move(black_piece));
-
-		auto white_grid_y   = grid_y + 6;
-		auto white_position = sf::Vector2u({ grid_x, white_grid_y });
-
-		auto white_piece = chess::Piece(chess::Team::White, "graphics/white_rook.png", white_position);
-		white_piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(chess::Team::White));
-		active_pieces_.try_emplace(white_position, std::move(white_piece));
-	}
+	factory_.GeneratePieces(active_pieces_);
 }
 
 void chess::Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -73,12 +53,10 @@ void chess::Board::SelectPosition(sf::Vector2u position) noexcept
 void chess::Board::TryMoveTo(sf::Vector2u target) noexcept
 {
 	position_selected_ = false;
-
 	if (!IsCoordinatesValid(target))
 	{
 		return;
 	}
-
 	auto it = active_pieces_.find(selected_position_);
 	if (it == active_pieces_.end())
 	{
@@ -95,7 +73,6 @@ void chess::Board::TryMoveTo(sf::Vector2u target) noexcept
 		inactive_pieces_.emplace_back(std::move(it_target->second));
 		active_pieces_.erase(target);
 	}
-
 	it->second.SetBoardPosition(target);
 	auto node = active_pieces_.extract(it);
 	node.key() = target;

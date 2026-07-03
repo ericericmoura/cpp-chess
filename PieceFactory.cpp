@@ -1,0 +1,102 @@
+#include "PieceFactory.h"
+
+#include <cmath>
+#include <memory>
+#include <utility>
+
+#include <SFML/System/Vector2.hpp>
+
+#include "StraightMovementComponent.h"
+#include "Board.h"
+#include "MovementComponent.h"
+#include "PawnMovementComponent.h"
+#include "Piece.h"
+#include "Team.h"
+#include "PieceType.h"
+
+void chess::PieceFactory::GeneratePieces(PiecesMap& board) const noexcept
+{
+	for (auto i = 0; i < 16; i++)
+	{
+		auto index = static_cast<float>(i);
+		auto grid_y = static_cast<unsigned int>(floor(index / chess::Board::kBoardSize.x));
+		auto grid_x = i % chess::Board::kBoardSize.x;
+
+		auto black_position = sf::Vector2u({ grid_x, grid_y });
+		auto white_position = black_position;
+		white_position.y += 6;
+
+		auto black_piece = GeneratePiece(black_position, chess::Team::Black);
+		auto white_piece = GeneratePiece(white_position, chess::Team::White);
+
+		board.try_emplace(black_position, std::move(black_piece));
+		board.try_emplace(white_position, std::move(white_piece));
+	}
+}
+
+chess::PieceType chess::PieceFactory::GetPieceType(const sf::Vector2u& position) const noexcept
+{
+	if (position.y == 1 || position.y == 6)
+	{
+		return PieceType::Pawn;
+	}
+	if (position.x == 0 || position.x == 7)
+	{
+		return PieceType::Rook;
+	}
+	if (position.x == 1 || position.x == 6)
+	{
+		return PieceType::Knight;
+	}
+	if (position.x == 2 || position.x == 5)
+	{
+		return PieceType::Bishop;
+	}
+	if (position.x == 2 || position.x == 5)
+	{
+		return PieceType::Bishop;
+	}
+	if (position.x == 3)
+	{
+		return PieceType::Queen;
+	}
+	return PieceType::King;
+}
+
+chess::Piece chess::PieceFactory::GeneratePiece(const sf::Vector2u& position, chess::Team team) const noexcept
+{
+	// Get type
+	auto type = GetPieceType(position);
+	
+	// Get image extension
+	auto& team_name = team == chess::Team::White ? pieces_info.white_team_name_ : pieces_info.black_team_name_;
+	auto piece_path = pieces_info.file_path_ + team_name + pieces_info.piece_name_map_.at(type) + pieces_info.sprite_extension_;
+	auto piece = chess::Piece(team, piece_path, position);
+	
+	// Add Components
+
+	int movement_range = MovementComponent::kUnlimitedMovementRange;
+	bool is_pawn = false;
+
+	switch (type)
+	{
+	case chess::PieceType::Pawn:		
+		piece.AddMovementComponent(std::make_unique<PawnMovementComponent>(team));
+		break;
+	case chess::PieceType::King:
+		movement_range = 1;
+		[[fallthrough]];
+	case chess::PieceType::Rook:
+	case chess::PieceType::Queen:		
+		piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(team, movement_range));
+		break;
+	case chess::PieceType::Bishop:
+		break;
+	case chess::PieceType::Knight:
+		break;
+	default:
+		break;
+	}
+
+	return piece;
+}
