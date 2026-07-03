@@ -43,6 +43,7 @@ private:
 
 	PieceType GetPieceType(const sf::Vector2u& position) const noexcept;
 	Piece GeneratePiece(const sf::Vector2u& position, chess::Team team) const noexcept;
+	void AttachComponentsForPiece(Piece& piece, chess::Team team, chess::PieceType type) const noexcept;
 };
 
 }

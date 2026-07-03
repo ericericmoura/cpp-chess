@@ -1,9 +1,9 @@
 #include "StraightMovementComponent.h"
 
-
 #include <unordered_map>
 #include <utility>
 #include <cmath>
+#include <algorithm>
 
 #include <SFML/System/Vector2.hpp>
 
@@ -51,27 +51,19 @@ bool chess::StraightMovementComponent::IsPositionReachable(const sf::Vector2u& c
 
 bool chess::StraightMovementComponent::IsPositionBlocked(const sf::Vector2u& current_pos, const sf::Vector2u& target_pos, PiecesMap& pieces) const noexcept
 {
-    auto vertical = target_pos.x == current_pos.x;
+    auto is_vertical = target_pos.x == current_pos.x;
 
-    auto start_i = current_pos.x + 1,
-         target_i = target_pos.x;
+    const unsigned current_coord = is_vertical ? current_pos.y : current_pos.x;
+    const unsigned target_coord  = is_vertical ? target_pos.y : target_pos.x;
 
-    if (vertical)
+    const unsigned lower = std::min(current_coord, target_coord) + 1;
+    const unsigned upper = std::max(current_coord, target_coord);
+
+    for (unsigned i = lower; i < upper; ++i)
     {
-        start_i  = current_pos.y + 1;
-        target_i = target_pos.y;
-    }
-    if (start_i > target_i)
-    {
-        auto temp = start_i;
-        start_i  = target_i + 1;
-        target_i = temp  - 1;
-    }
-    for (int i = start_i; i < target_i; ++i)
-    {
-        auto pos = vertical ? sf::Vector2u(current_pos.x, i) : sf::Vector2u(i, current_pos.y);
-        auto it_checking = pieces.find(pos);
-        if (it_checking != pieces.end())
+        auto pos = is_vertical ? sf::Vector2u(current_pos.x, i) 
+                               : sf::Vector2u(i, current_pos.y);
+        if (pieces.contains(pos))
         {
             return true;
         }
