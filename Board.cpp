@@ -1,8 +1,8 @@
 #include "Board.h"
 
-#include <iostream>
 #include <memory>
 #include <utility>
+#include <cmath>
 #include <algorithm>
 
 #include <SFML/Graphics/RenderStates.hpp>
@@ -21,29 +21,25 @@ chess::Board::Board()
 
 void chess::Board::GeneratePieces() noexcept
 {
-	auto black_piece = chess::Piece(chess::Team::Black, "graphics/black_rook.png", {0,0});
-	black_piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(chess::Team::Black));
-	active_pieces_.try_emplace({0, 0}, std::move(black_piece));
+	for (auto i = 0; i < 16; i++)
+	{
+		auto index  = static_cast<float>(i);
+		auto grid_y = static_cast<unsigned int>(floor(index / kBoardSize.x));
+		auto grid_x = i % kBoardSize.x;
 
-	//for (auto i = 0; i < 16; i++)
-	//{
-	//	auto index  = static_cast<float>(i + 1);
-	//	auto grid_y = static_cast<unsigned int>(ceil(index / kBoardSize.x));
-	//	auto grid_x = i % kBoardSize.x + 1;
+		auto position = sf::Vector2u({ grid_x, grid_y });
 
-	//	auto position = sf::Vector2u({ grid_x, grid_y });
+		auto black_piece = chess::Piece(chess::Team::Black, "graphics/black_rook.png", position);
+		black_piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(chess::Team::Black));
+		active_pieces_.try_emplace(position, std::move(black_piece));
 
-	//	auto black_piece = chess::Piece(chess::Team::Black, "graphics/black_rook.png", position);
-	//	black_piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(chess::Team::Black));
-	//	active_pieces_.try_emplace(position, std::move(black_piece));
+		auto white_grid_y   = grid_y + 6;
+		auto white_position = sf::Vector2u({ grid_x, white_grid_y });
 
-	//	auto white_grid_y   = grid_y + 6;
-	//	auto white_position = sf::Vector2u({ grid_x, white_grid_y });
-
-	//	auto white_piece = chess::Piece(chess::Team::White, "graphics/white_rook.png", white_position);
-	//	white_piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(chess::Team::White));
-	//	active_pieces_.try_emplace(white_position, std::move(white_piece));
-	//}
+		auto white_piece = chess::Piece(chess::Team::White, "graphics/white_rook.png", white_position);
+		white_piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(chess::Team::White));
+		active_pieces_.try_emplace(white_position, std::move(white_piece));
+	}
 }
 
 void chess::Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
