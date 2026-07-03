@@ -8,7 +8,6 @@
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/System/Vector2.hpp>
 
-#include "Vector2Operators.h"
 #include "Board.h"
 #include "Team.h"
 #include "MovementComponent.h"
@@ -36,7 +35,7 @@ bool chess::Piece::TryMove(PiecesMap& pieces, sf::Vector2u position) noexcept
 {
 	for (auto& comp : movement_components_)
 	{
-		auto success = comp->TryMove(*this, chess::Board::GetBoardCoordinates(getPosition()), position, pieces);
+		auto success = comp->TryMove(*this, chess::Board::GetCoordinates(getPosition()), position, pieces);
 		if (success)
 		{
 			return true;
@@ -47,17 +46,15 @@ bool chess::Piece::TryMove(PiecesMap& pieces, sf::Vector2u position) noexcept
 
 void chess::Piece::SetBoardPosition(sf::Vector2u pos) noexcept
 {
-	if (pos > chess::Board::kBoardSize ||
-		pos < sf::Vector2u({1, 1}))
+	if (!chess::Board::IsCoordinatesValid(pos))
 	{
 		return;
 	}
-	setPosition(chess::Board::GetPositionInPixels(pos - sf::Vector2u{1, 1}));
+	setPosition(chess::Board::GetPositionInPixels(pos) + sf::Vector2f(chess::Board::kCellSize / 2u));
 }
 
 void chess::Piece::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	if (dead_) return;
 	states.transform *= getTransform();
 	graphics_.draw(target, states);
 }

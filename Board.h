@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <string>
+#include <vector>
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -31,21 +32,25 @@ public:
 	
 	void SelectPosition(sf::Vector2u position) noexcept;
 	void TryMoveTo(sf::Vector2u target) noexcept;
-
-	static inline sf::Vector2u GetBoardMargin() noexcept
+	
+	inline bool IsPositionSelected() const noexcept
 	{
-		return chess::Board::kMargin + chess::Board::kCellSize / 2u;
+		return position_selected_;
 	}
 
 	static sf::Vector2f GetPositionInPixels(sf::Vector2u board_position) noexcept;
-	static sf::Vector2u GetBoardCoordinates(sf::Vector2f position) noexcept;
+	static sf::Vector2u GetCoordinates(sf::Vector2f position) noexcept;
+	static bool IsCoordinatesValid(sf::Vector2u position) noexcept;
 
 private:
 	PiecesMap active_pieces_{};
+	std::vector<Piece> inactive_pieces_{};
 
 	sf::Vector2u selected_position_{};
 
 	StandardGraphicsComponent graphics_{};
+
+	bool position_selected_ = false;
 };
 
 }

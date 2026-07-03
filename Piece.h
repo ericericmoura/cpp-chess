@@ -39,11 +39,6 @@ public:
 		return team_;
 	}
 
-	void Capture() noexcept 
-	{
-		dead_ = true;
-	};
-
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
@@ -51,8 +46,6 @@ private:
 
 	StandardGraphicsComponent graphics_{};
 	Team team_{};
-
-	bool dead_ = false;
 };
 
 using PiecesMap = std::unordered_map<sf::Vector2u, Piece, Vec2uHash>;

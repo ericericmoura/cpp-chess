@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -9,9 +10,11 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/View.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Mouse.hpp>
 
 #include "Board.h"
 #include "BitmapStore.h"
+#include "Vector2Operators.h"
 
 constexpr int GrayColor = 57;
 const std::string WindowTitle = "Chess";
@@ -23,6 +26,7 @@ int main()
 
 	chess::Board board{};
 	board.GeneratePieces();
+	board.setPosition({ 0, 0 });
 
 	auto delay = 2.f;
 	auto time_elapsed = 0.f;
@@ -42,7 +46,7 @@ int main()
 
 	auto current_window_status = sf::State::Windowed;
 
-	bool moved = false;
+	auto times_moved = 0u;
 
 	sf::Clock clock{};
 	while (window.isOpen())
@@ -54,7 +58,26 @@ int main()
 			{
 				window.close();
 			}
-			if (auto key = event->getIf<sf::Event::KeyPressed>())
+			else if (auto mouse = event->getIf<sf::Event::MouseButtonPressed>())
+			{
+				if (mouse->button == sf::Mouse::Button::Left)
+				{
+					auto mouse_position = window.mapPixelToCoords(mouse->position, main_camera);
+					auto board_mouse_position = chess::Board::GetCoordinates(mouse_position);
+
+					//std::cout << "\nX: " << board_mouse_position.x << " Y:" << board_mouse_position.y;
+
+					if (!board.IsPositionSelected())
+					{
+						board.SelectPosition(board_mouse_position);
+					}
+					else
+					{
+						board.TryMoveTo(board_mouse_position);
+					}
+				}
+			}
+			else if (auto key = event->getIf<sf::Event::KeyPressed>())
 			{
 				if (key->scancode == sf::Keyboard::Scancode::F11)
 				{
@@ -62,16 +85,7 @@ int main()
 					window.create(video_mode, WindowTitle, current_window_status);
 
 					window.setView(main_camera);
-				}
-				else if (key->scancode == sf::Keyboard::Scancode::E)
-				{
-					board.SelectPosition({1, 2});					
-				}
-				else if (!moved && key->scancode == sf::Keyboard::Scancode::R)
-				{
-					board.TryMoveTo({ 1, 8 });
-					moved = true;
-				}
+				}		
 			}
 		}
 		
