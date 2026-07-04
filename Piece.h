@@ -12,11 +12,13 @@
 #include <SFML/System/Vector2.hpp>
 
 #include "StandardGraphicsComponent.h"
-#include "MovementComponent.h"
 #include "Team.h"
 #include "Vector2Hash.h"
+#include "PieceType.h"
 
 namespace chess {
+
+class MovementComponent;
 
 class Piece : public sf::Transformable, public sf::Drawable
 {
@@ -39,6 +41,24 @@ public:
 		return team_;
 	}
 
+	PieceType GetPieceType() const noexcept
+	{
+		return type_;
+	}
+
+	template <typename T>
+	T* GetComponentByType()
+	{
+		for (auto& component : movement_components_)
+		{
+			if (auto cast_result = dynamic_cast<T*>(component.get()))
+			{
+				return cast_result;
+			}
+		}
+		return nullptr;
+	}
+
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
@@ -46,6 +66,7 @@ private:
 
 	StandardGraphicsComponent graphics_{};
 	Team team_{};
+	PieceType type_{};
 };
 
 using PiecesMap = std::unordered_map<sf::Vector2u, Piece, Vec2uHash>;
