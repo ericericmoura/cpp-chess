@@ -152,6 +152,7 @@
     <ClCompile Include="BitmapStore.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="DiagonalMovementComponent.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="PawnMovementComponent.cpp" />
     <ClCompile Include="Piece.cpp" />
@@ -162,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="BitmapStore.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="DiagonalMovementComponent.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="PawnMovementComponent.h" />
     <ClInclude Include="Piece.h" />
