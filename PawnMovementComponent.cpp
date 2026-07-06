@@ -13,7 +13,20 @@
 
 chess::PawnMovementComponent::PawnMovementComponent(Piece& piece)
     : StraightMovementComponent(piece, 2)
-{};
+{}
+
+bool chess::PawnMovementComponent::TryMove(Board& board, const sf::Vector2u & current_pos, const sf::Vector2u & target_pos) noexcept
+{
+    bool result = MovementComponent::TryMove(board, current_pos, target_pos);
+
+    if (done_en_passant_)
+    {
+        board.CaptureAt(en_passant_piece_position_);
+        done_en_passant_ = false;
+    }
+
+    return result;
+}
 
 bool chess::PawnMovementComponent::IsPositionReachable(const sf::Vector2u& current_pos, const sf::Vector2u& target_pos, bool occupied_by_enemy) const noexcept
 {   
@@ -22,6 +35,12 @@ bool chess::PawnMovementComponent::IsPositionReachable(const sf::Vector2u& curre
     if (!going_forwards)
     {
         return false;
+    }
+    if (can_do_en_passant_ && target_pos == en_passant_position_)
+    {
+        done_en_passant_   = true;
+        can_do_en_passant_ = false;
+        return true;
     }
     if (!occupied_by_enemy)
     {
@@ -42,32 +61,47 @@ void chess::PawnMovementComponent::AllowEnPassant(sf::Vector2u at_pos) noexcept
     en_passant_position_ = at_pos;
 }
 
-void chess::PawnMovementComponent::Moved(const sf::Vector2u& previous_pos, const sf::Vector2u& current_pos, PiecesMap& pieces) noexcept
+void chess::PawnMovementComponent::Moved(const sf::Vector2u& previous_pos, const sf::Vector2u& current_pos, Board& board) noexcept
 {
-    auto left_pos  = previous_pos;
-    auto right_pos = previous_pos;
-
-    left_pos .x--;
-    right_pos.x--;
-
-    auto it_left  = pieces.find(left_pos );
-    if (it_left != pieces.end() && it_left->second.GetPieceType() == chess::PieceType::Pawn)
+    auto distance_y = abs(static_cast<int>(current_pos.y - previous_pos.y));
+    if (first_movement_ && distance_y == 2)
     {
-        auto pawn_movement_component = it_left->second.GetComponentByType<PawnMovementComponent>();
-        if (pawn_movement_component)
-        {
-            auto en_passant_position = current_pos;
-            en_passant_position.y -= team_ == Team::Black ? 1 : -1;
-            pawn_movement_component->AllowEnPassant(en_passant_position);
-        }
+        auto left_pos  = current_pos;
+        auto right_pos = current_pos;
+
+        left_pos.x--;
+        right_pos.x++;
+
+        CheckForEnPassant(left_pos , current_pos, board);
+        CheckForEnPassant(right_pos, current_pos, board);
     }
+    DecreasePawnMovement();
+}
 
-    auto it_right = pieces.find(right_pos);
-
+void chess::PawnMovementComponent::DecreasePawnMovement() noexcept
+{
     if (!first_movement_)
     {
         return;
     }
     first_movement_ = false;
     movement_range_--;
+}
+
+void chess::PawnMovementComponent::CheckForEnPassant(const sf::Vector2u& target_pos, const sf::Vector2u& current_pos, Board& board) noexcept
+{    
+    auto nearby_piece = board.GetPieceAt(target_pos);
+    if (nearby_piece == nullptr || nearby_piece->GetPieceType() != chess::PieceType::Pawn)
+    {
+        return;
+    }
+    auto pawn_movement_component = nearby_piece->GetComponentByType<PawnMovementComponent>();
+    if (pawn_movement_component == nullptr)
+    {
+        return;
+    }
+    auto en_passant_position = current_pos;
+    en_passant_position.y -= team_ == Team::Black ? 1 : -1;
+    pawn_movement_component->AllowEnPassant(en_passant_position);
+    pawn_movement_component->en_passant_piece_position_ = current_pos;
 }

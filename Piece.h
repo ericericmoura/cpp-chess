@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <unordered_map>
 
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
@@ -13,15 +12,16 @@
 
 #include "StandardGraphicsComponent.h"
 #include "Team.h"
-#include "Vector2Hash.h"
 #include "PieceType.h"
+#include "MovementComponent.h"
 
 namespace chess {
 
-class MovementComponent;
+class Board;
 
 class Piece : public sf::Transformable, public sf::Drawable
 {
+
 public:
 	Piece() = default;
 	Piece(Team team, const std::string& texture_key, sf::Vector2u starting_pos) noexcept;
@@ -33,7 +33,7 @@ public:
 	Piece& operator=(const Piece&) = delete;
 
 	void AddMovementComponent(std::unique_ptr<MovementComponent> comp) noexcept;
-	bool TryMove(PiecesMap& pieces, sf::Vector2u position) noexcept;
+	bool TryMove(Board& board, sf::Vector2u position) noexcept;
 
 	void SetBoardPosition(sf::Vector2u pos) noexcept;
 	Team GetTeam() const noexcept
@@ -47,7 +47,7 @@ public:
 	}
 
 	template <typename T>
-	T* GetComponentByType()
+	T* GetComponentByType() const
 	{
 		for (auto& component : movement_components_)
 		{
@@ -69,5 +69,4 @@ private:
 	PieceType type_{};
 };
 
-using PiecesMap = std::unordered_map<sf::Vector2u, Piece, Vec2uHash>;
 }

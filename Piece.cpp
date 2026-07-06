@@ -31,11 +31,11 @@ void chess::Piece::AddMovementComponent(std::unique_ptr<MovementComponent> comp)
 	movement_components_.emplace_back(std::move(comp));
 }
 
-bool chess::Piece::TryMove(PiecesMap& pieces, sf::Vector2u position) noexcept
+bool chess::Piece::TryMove(Board& board, sf::Vector2u position) noexcept
 {
 	for (auto& comp : movement_components_)
 	{
-		auto success = comp->TryMove(chess::Board::GetCoordinates(getPosition()), position, pieces);
+		auto success = comp->TryMove(board, chess::Board::GetCoordinates(getPosition()), position);
 		if (success)
 		{
 			return true;

@@ -33,6 +33,10 @@ public:
 	
 	void SelectPosition(sf::Vector2u position) noexcept;
 	void TryMoveTo(sf::Vector2u target) noexcept;
+
+	void CaptureAt(sf::Vector2u position) noexcept;
+	const Piece* GetPieceAt(sf::Vector2u position) const noexcept;
+	bool IsPositionOccupied(const sf::Vector2u& position) const noexcept;
 	
 	inline bool IsPositionSelected() const noexcept
 	{

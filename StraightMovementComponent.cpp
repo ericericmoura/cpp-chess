@@ -6,6 +6,8 @@
 #include <SFML/System/Vector2.hpp>
 
 #include "MovementComponent.h"
+#include "Piece.h"
+#include "Board.h"
 
 chess::StraightMovementComponent::StraightMovementComponent(Piece& piece, unsigned int movement_range)
     : MovementComponent(piece)
@@ -27,7 +29,7 @@ bool chess::StraightMovementComponent::IsPositionReachable(const sf::Vector2u& c
     return target_pos.x == current_pos.x || target_pos.y == current_pos.y;
 }
 
-bool chess::StraightMovementComponent::IsPositionBlocked(const sf::Vector2u& current_pos, const sf::Vector2u& target_pos, PiecesMap& pieces) const noexcept
+bool chess::StraightMovementComponent::IsPositionBlocked(const sf::Vector2u& current_pos, const sf::Vector2u& target_pos, Board& board) const noexcept
 {
     auto is_vertical = target_pos.x == current_pos.x;
 
@@ -41,7 +43,7 @@ bool chess::StraightMovementComponent::IsPositionBlocked(const sf::Vector2u& cur
     {
         auto pos = is_vertical ? sf::Vector2u(current_pos.x, i) 
                                : sf::Vector2u(i, current_pos.y);
-        if (pieces.contains(pos))
+        if (board.IsPositionOccupied(pos))
         {
             return true;
         }

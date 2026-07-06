@@ -62,21 +62,44 @@ void chess::Board::TryMoveTo(sf::Vector2u target) noexcept
 	{
 		return;
 	}
-	if (!it->second.TryMove(active_pieces_, target))
+	if (!it->second.TryMove(*this, target))
 	{		
 		return;
 	}
-	auto it_target = active_pieces_.find(target);
-	if (it_target != active_pieces_.end())
-	{
-		it_target->second.setPosition({ kMargin.x + static_cast<float>(kCellSize.x) * inactive_pieces_.size(), 10});
-		inactive_pieces_.emplace_back(std::move(it_target->second));
-		active_pieces_.erase(target);
-	}
+
+	CaptureAt(target);
+
 	it->second.SetBoardPosition(target);
 	auto node = active_pieces_.extract(it);
 	node.key() = target;
 	active_pieces_.insert(std::move(node));
+}
+
+void chess::Board::CaptureAt(sf::Vector2u position) noexcept
+{
+	auto it_target = active_pieces_.find(position);
+	if (it_target == active_pieces_.end())
+	{
+		return;
+	}
+	it_target->second.setPosition({ kMargin.x + static_cast<float>(kCellSize.x) * inactive_pieces_.size(), 10 });
+	inactive_pieces_.emplace_back(std::move(it_target->second));
+	active_pieces_.erase(position);
+}
+
+const chess::Piece* chess::Board::GetPieceAt(sf::Vector2u position) const noexcept
+{
+	auto it = active_pieces_.find(position);
+	if (it == active_pieces_.end())
+	{
+		return nullptr;
+	}
+	return &it->second;
+}
+
+bool chess::Board::IsPositionOccupied(const sf::Vector2u& position) const noexcept
+{
+	return active_pieces_.contains(position);
 }
 
 sf::Vector2f chess::Board::GetPositionInPixels(sf::Vector2u board_position) noexcept

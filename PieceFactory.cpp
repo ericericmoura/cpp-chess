@@ -82,25 +82,25 @@ void chess::PieceFactory::AttachComponentsForPiece(Piece& piece, chess::Team tea
 {
 	if (type == chess::PieceType::Pawn)
 	{
-		piece.AddMovementComponent(std::make_unique<PawnMovementComponent>(team));
+		piece.AddMovementComponent(std::make_unique<PawnMovementComponent>(piece));
 	}
 	else if (type == chess::PieceType::Rook)
 	{
-		piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(team));
+		piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(piece));
 	}
 	else if (type == chess::PieceType::Bishop)
 	{
-		//piece.AddMovementComponent(std::make_unique<DiagonalMovementComponent>(team));
+		//piece.AddMovementComponent(std::make_unique<DiagonalMovementComponent>(piece));
 	}
 	else if (type == chess::PieceType::Knight)
 	{
-		//piece.AddMovementComponent(std::make_unique<LShapedMovementComponent>(team));
+		//piece.AddMovementComponent(std::make_unique<LShapedMovementComponent>(piece));
 	}
 	else
 	{
 		auto movement_range = type == chess::PieceType::King ? 1 : MovementComponent::kUnlimitedMovementRange;
 
-		piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(team, movement_range));
-		//piece.AddMovementComponent(std::make_unique<DiagonalMovementComponent>(team, movement_range));
+		piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(piece, movement_range));
+		//piece.AddMovementComponent(std::make_unique<DiagonalMovementComponent>(piece, movement_range));
 	}
 }
