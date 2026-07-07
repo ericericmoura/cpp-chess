@@ -15,8 +15,8 @@ chess::DiagonalMovementComponent::DiagonalMovementComponent(Piece& piece, unsign
 
 bool chess::DiagonalMovementComponent::IsPositionReachable(const sf::Vector2u& current_pos, const sf::Vector2u& target_pos, bool occupied_by_enemy) const noexcept
 {
-    auto distance_x = abs(static_cast<int>(target_pos.x - current_pos.x));
-    auto distance_y = abs(static_cast<int>(target_pos.y - current_pos.y));    
+    auto distance_x = abs(static_cast<int>(target_pos.x) - static_cast<int>(current_pos.x));
+    auto distance_y = abs(static_cast<int>(target_pos.y) - static_cast<int>(current_pos.y));
 
     auto is_in_range = (movement_range_ == MovementComponent::kUnlimitedMovementRange || distance_x <= movement_range_);
     auto is_diagonal = distance_x == distance_y;
