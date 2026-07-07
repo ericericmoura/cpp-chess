@@ -10,6 +10,7 @@
 #include "MovementComponent.h"
 #include "PawnMovementComponent.h"
 #include "DiagonalMovementComponent.h"
+#include "LShapedMovementComponent.h"
 #include "Board.h"
 #include "Piece.h"
 #include "Team.h"
@@ -95,7 +96,7 @@ void chess::PieceFactory::AttachComponentsForPiece(Piece& piece, chess::Team tea
 	}
 	else if (type == chess::PieceType::Knight)
 	{
-		//piece.AddMovementComponent(std::make_unique<LShapedMovementComponent>(piece));
+		piece.AddMovementComponent(std::make_unique<LShapedMovementComponent>(piece));
 	}
 	else
 	{

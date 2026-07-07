@@ -153,6 +153,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="DiagonalMovementComponent.cpp" />
+    <ClCompile Include="LShapedMovementComponent.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="PawnMovementComponent.cpp" />
     <ClCompile Include="Piece.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="BitmapStore.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="DiagonalMovementComponent.h" />
+    <ClInclude Include="LShapedMovementComponent.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="PawnMovementComponent.h" />
     <ClInclude Include="Piece.h" />
