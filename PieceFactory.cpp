@@ -7,9 +7,10 @@
 #include <SFML/System/Vector2.hpp>
 
 #include "StraightMovementComponent.h"
-#include "Board.h"
 #include "MovementComponent.h"
 #include "PawnMovementComponent.h"
+#include "DiagonalMovementComponent.h"
+#include "Board.h"
 #include "Piece.h"
 #include "Team.h"
 #include "PieceType.h"
@@ -90,7 +91,7 @@ void chess::PieceFactory::AttachComponentsForPiece(Piece& piece, chess::Team tea
 	}
 	else if (type == chess::PieceType::Bishop)
 	{
-		//piece.AddMovementComponent(std::make_unique<DiagonalMovementComponent>(piece));
+		piece.AddMovementComponent(std::make_unique<DiagonalMovementComponent>(piece));
 	}
 	else if (type == chess::PieceType::Knight)
 	{
@@ -101,6 +102,6 @@ void chess::PieceFactory::AttachComponentsForPiece(Piece& piece, chess::Team tea
 		auto movement_range = type == chess::PieceType::King ? 1 : MovementComponent::kUnlimitedMovementRange;
 
 		piece.AddMovementComponent(std::make_unique<StraightMovementComponent>(piece, movement_range));
-		//piece.AddMovementComponent(std::make_unique<DiagonalMovementComponent>(piece, movement_range));
+		piece.AddMovementComponent(std::make_unique<DiagonalMovementComponent>(piece, movement_range));
 	}
 }

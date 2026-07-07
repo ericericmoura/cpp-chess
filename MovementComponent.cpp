@@ -18,8 +18,8 @@ bool chess::MovementComponent::TryMove(Board & board, const sf::Vector2u & curre
     bool occupied_by_enemy = false;
     if (target_piece != nullptr)
     {
-        bool occupied_by_ally  = target_piece->GetTeam() == team_;
-        bool occupied_by_enemy = target_piece->GetTeam() != team_;
+        occupied_by_ally  = target_piece->GetTeam() == team_;
+        occupied_by_enemy = target_piece->GetTeam() != team_;
     }
 
     bool is_position_valid =

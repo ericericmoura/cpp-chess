@@ -1,9 +1,14 @@
 #pragma once
 
+#include <SFML/System/Vector2.hpp>
+
 #include "MovementComponent.h"
 
 namespace chess
 {
+
+class Piece;
+class Board;
 
 class DiagonalMovementComponent : public MovementComponent
 {
