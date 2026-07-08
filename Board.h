@@ -1,7 +1,6 @@
 #pragma once
 
 #include <unordered_map>
-#include <string>
 #include <vector>
 
 #include <SFML/System/Vector2.hpp>
@@ -14,6 +13,7 @@
 #include "Piece.h"
 #include "StandardGraphicsComponent.h"
 #include "PieceFactory.h"
+#include "BoardConfiguration.h"
 
 namespace chess {
 
@@ -22,12 +22,7 @@ using PiecesMap = std::unordered_map<sf::Vector2u, Piece, Vec2uHash>;
 class Board : public sf::Transformable, public sf::Drawable
 {
 public:
-	inline static constexpr sf::Vector2u kBoardSize  = { 8 , 8  };
-	inline static constexpr sf::Vector2u kMargin     = { 40, 40 };
-	inline static constexpr sf::Vector2u kCellSize   = { 22, 22 };
-	inline static const std::string kTextureKey = "graphics/board_alt.png";
-
-	Board();
+	Board(BoardConfiguration board_config);
 	void GeneratePieces() noexcept;	
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	
@@ -44,10 +39,12 @@ public:
 	}
 
 	static sf::Vector2f GetPositionInPixels(sf::Vector2u board_position) noexcept;
-	static sf::Vector2u GetCoordinates(sf::Vector2f position) noexcept;
-	static bool IsCoordinatesValid(sf::Vector2u position) noexcept;
+	static sf::Vector2u GetCoordinates     (sf::Vector2f position) noexcept;
+	static bool         IsCoordinatesValid (sf::Vector2u position) noexcept;
 
 private:
+	BoardConfiguration board_config_{};
+
 	PieceFactory factory_{};
 
 	PiecesMap active_pieces_{};

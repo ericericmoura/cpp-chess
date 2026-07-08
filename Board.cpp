@@ -1,8 +1,6 @@
 #include "Board.h"
 
-#include <memory>
 #include <utility>
-#include <cmath>
 #include <algorithm>
 
 #include <SFML/Graphics/RenderStates.hpp>
@@ -11,11 +9,12 @@
 
 #include "Piece.h"
 #include "Vector2Operators.h"
+#include "BoardConfiguration.h"
 
-chess::Board::Board()
-	: graphics_{kTextureKey}
-{
-}
+chess::Board::Board(BoardConfiguration board_config)
+	: board_config_{board_config}
+	, graphics_    {board_config_.texture_key_}
+{}
 
 void chess::Board::GeneratePieces() noexcept
 {

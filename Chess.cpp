@@ -25,13 +25,13 @@ int main()
 
 	auto video_mode = sf::VideoMode::getDesktopMode();
 	sf::RenderWindow window(video_mode, window_config.title_, window_config.state_);
+	auto current_window_status = window_config.state_;
 
 	chess::Board board{};
 	board.GeneratePieces();
-	board.setPosition({ 0, 0 });
 
 	// CAMERA CONFIGURATION
-	auto board_size = BitmapStore::GetInstance().GetTexture(chess::Board::kTextureKey).getSize();
+	auto board_size   = BitmapStore::GetInstance().GetTexture(board_config.texture_key_).getSize();
 	auto display_size = video_mode.size;
 
 	auto factor = static_cast<float>(display_size.y) / display_size.x;
@@ -40,12 +40,7 @@ int main()
 	main_camera.setSize(sf::Vector2f(board_size));
 	main_camera.setCenter(board.getPosition() + sf::Vector2f(board_size / 2u));
 	main_camera.setViewport({ {(1.f - factor) / 2.f, 0.f}, {factor, 1.f} });
-
 	window.setView(main_camera);
-
-	auto current_window_status = sf::State::Windowed;
-
-	auto times_moved = 0u;
 
 	sf::Clock clock{};
 	while (window.isOpen())
@@ -61,10 +56,8 @@ int main()
 			{
 				if (mouse->button == sf::Mouse::Button::Left)
 				{
-					auto mouse_position = window.mapPixelToCoords(mouse->position, main_camera);
+					auto mouse_position       = window.mapPixelToCoords(mouse->position, main_camera);
 					auto board_mouse_position = chess::Board::GetCoordinates(mouse_position);
-
-					//std::cout << "\nX: " << board_mouse_position.x << " Y:" << board_mouse_position.y;
 
 					if (!board.IsPositionSelected())
 					{
