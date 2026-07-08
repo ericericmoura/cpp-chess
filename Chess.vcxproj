@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -160,11 +160,16 @@
     <ClCompile Include="PieceFactory.cpp" />
     <ClCompile Include="StandardGraphicsComponent.cpp" />
     <ClCompile Include="StraightMovementComponent.cpp" />
+    <ClCompile Include="WindowConfiguration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitmapStore.h" />
+    <ClInclude Include="Blueprint.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="DiagonalMovementComponent.h" />
+    <ClInclude Include="FileParser.h" />
+    <ClInclude Include="GetFileTagByRegex.h" />
+    <ClInclude Include="get_name.h" />
     <ClInclude Include="LShapedMovementComponent.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="PawnMovementComponent.h" />
@@ -176,6 +181,7 @@
     <ClInclude Include="Team.h" />
     <ClInclude Include="Vector2Hash.h" />
     <ClInclude Include="Vector2Operators.h" />
+    <ClInclude Include="WindowConfiguration.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

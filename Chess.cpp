@@ -1,5 +1,4 @@
 #include <string>
-#include <iostream>
 
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -14,7 +13,6 @@
 
 #include "Board.h"
 #include "BitmapStore.h"
-#include "Vector2Operators.h"
 
 constexpr int GrayColor = 57;
 const std::string WindowTitle = "Chess";
@@ -27,9 +25,6 @@ int main()
 	chess::Board board{};
 	board.GeneratePieces();
 	board.setPosition({ 0, 0 });
-
-	auto delay = 2.f;
-	auto time_elapsed = 0.f;
 
 	// CAMERA CONFIGURATION
 	auto board_size = BitmapStore::GetInstance().GetTexture(chess::Board::kTextureKey).getSize();
