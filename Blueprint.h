@@ -8,7 +8,7 @@ struct Blueprint
 {
 	static constexpr char kCommentChar = '#';
 
-	virtual void Parse(std::vector<std::string>& data) noexcept = 0;
+	virtual void Parse(std::vector<std::string>& data) = 0;
 };
 
 template<typename BP>

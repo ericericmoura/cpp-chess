@@ -84,6 +84,12 @@
     <ClCompile Include="WindowConfiguration.cpp">
       <Filter>Source Files\FileIO\Blueprints</Filter>
     </ClCompile>
+    <ClCompile Include="BoardConfiguration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringToVector2.h">
+      <Filter>Header Files\FileIO\Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Piece.h">
@@ -134,7 +140,7 @@
     <ClInclude Include="Vector2Operators.h">
       <Filter>Header Files\Misc</Filter>
     </ClInclude>
-    <ClInclude Include="GetVariableName.h">
+    <ClInclude Include="GET_NAME.h">
       <Filter>Header Files\FileIO</Filter>
     </ClInclude>
     <ClInclude Include="FileParser.h">
@@ -147,6 +153,9 @@
       <Filter>Header Files\FileIO\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoardConfiguration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,7 +4,7 @@
 
 #define GET_NAME(name) GetNameFromVariable(#name)
 
-std::string GetNameFromVariable(const char* name)
+inline std::string GetNameFromVariable(const char* name)
 {
     return name;
 }

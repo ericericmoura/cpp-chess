@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="BitmapStore.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="BoardConfiguration.cpp" />
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="DiagonalMovementComponent.cpp" />
     <ClCompile Include="LShapedMovementComponent.cpp" />
@@ -160,17 +161,19 @@
     <ClCompile Include="PieceFactory.cpp" />
     <ClCompile Include="StandardGraphicsComponent.cpp" />
     <ClCompile Include="StraightMovementComponent.cpp" />
+    <ClCompile Include="StringToVector2.h" />
     <ClCompile Include="WindowConfiguration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitmapStore.h" />
     <ClInclude Include="Blueprint.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="BoardConfiguration.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DiagonalMovementComponent.h" />
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="GetFileTagByRegex.h" />
-    <ClInclude Include="GetVariableName.h" />
+    <ClInclude Include="GET_NAME.h" />
     <ClInclude Include="LShapedMovementComponent.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="PawnMovementComponent.h" />

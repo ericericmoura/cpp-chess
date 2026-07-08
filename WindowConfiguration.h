@@ -15,7 +15,7 @@ struct WindowConfiguration : public Blueprint
 	sf::State state_           {};
 	sf::Color background_color_{};
 
-	void Parse(std::vector<std::string>& data) noexcept override;
+	void Parse(std::vector<std::string>& data) override;
 
 private:
 	sf::State GetStateFromString(const std::string& value) const noexcept;

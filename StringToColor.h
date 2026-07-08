@@ -5,10 +5,8 @@
 #include <vector>
 
 #include <SFML/Graphics/Color.hpp>
-#include <algorithm>
-#include <cctype>
 
-sf::Color StringToColor(const std::string& value) noexcept
+inline sf::Color StringToColor(const std::string& value) noexcept
 {
 	std::stringstream ss(value);
     std::vector<std::string> result;
@@ -20,17 +18,17 @@ sf::Color StringToColor(const std::string& value) noexcept
         result.push_back(substr);
     }
 
-    sf::Color color_{};
+    sf::Color color{};
     if (result.size() < 3)
     {
         return{};
     }
-    color_.r = std::stoi(result.at(0));
-    color_.g = std::stoi(result.at(1));
-    color_.b = std::stoi(result.at(2));
+    color.r = std::stoi(result.at(0));
+    color.g = std::stoi(result.at(1));
+    color.b = std::stoi(result.at(2));
     if (result.size() == 4)
     {
-        color_.a = std::stoi(result.at(3));
+        color.a = std::stoi(result.at(3));
     }
-    return color_;
+    return color;
 }

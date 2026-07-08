@@ -1,0 +1,5 @@
+# BOARD SETTINGS
+[texture_key_]graphics/board_alt.png[texture_key_]
+[board_size_]8,8[board_size_]
+[margin_]40,40[margin_]
+[cell_size_]22,22[cell_size_]

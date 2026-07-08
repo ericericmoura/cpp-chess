@@ -5,7 +5,7 @@
 #include <utility>
 #include <regex>
 
-std::pair<std::string, std::string> GetFileTagByRegex(const std::string& line)
+inline std::pair<std::string, std::string> GetFileTagByRegex(const std::string& line)
 {
     std::regex pattern(R"(\[(\w+)\](.*?)\[\1\])");
 

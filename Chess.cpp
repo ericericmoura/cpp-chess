@@ -1,5 +1,3 @@
-#include <string>
-
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/VideoMode.hpp>
@@ -15,11 +13,15 @@
 #include "BitmapStore.h"
 #include "FileParser.h"
 #include "WindowConfiguration.h"
+#include "BoardConfiguration.h"
 
 int main()
 {		
-	FileParser parser_(Constants::WindowSettingsPath);
-	auto window_config = parser_.GetBlueprint<WindowConfiguration>();
+	FileParser window_parser(Constants::WindowSettingsPath);
+	const auto window_config = window_parser.GetBlueprint<WindowConfiguration>();
+
+	FileParser board_parser(Constants::BoardSettingsPath);
+	const auto board_config = board_parser.GetBlueprint<BoardConfiguration>();
 
 	auto video_mode = sf::VideoMode::getDesktopMode();
 	sf::RenderWindow window(video_mode, window_config.title_, window_config.state_);

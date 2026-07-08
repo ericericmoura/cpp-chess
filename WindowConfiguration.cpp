@@ -6,10 +6,10 @@
 #include <SFML/Window/WindowEnums.hpp>
 
 #include "GetFileTagByRegex.h"
-#include "GetVariableName.h"
+#include "GET_NAME.h"
 #include "StringToColor.h"
 
-void WindowConfiguration::Parse(std::vector<std::string>& data) noexcept
+void WindowConfiguration::Parse(std::vector<std::string>& data)
 {
 	for (const auto& line : data)
 	{
