@@ -166,6 +166,7 @@
     <ClInclude Include="BitmapStore.h" />
     <ClInclude Include="Blueprint.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="DiagonalMovementComponent.h" />
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="GetFileTagByRegex.h" />

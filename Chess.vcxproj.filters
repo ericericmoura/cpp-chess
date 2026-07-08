@@ -146,5 +146,8 @@
     <ClInclude Include="StringToColor.h">
       <Filter>Header Files\FileIO\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

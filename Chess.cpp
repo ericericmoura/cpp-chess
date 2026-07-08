@@ -5,22 +5,24 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowEnums.hpp>
 #include <SFML/Window/Event.hpp>
-#include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Graphics/View.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Mouse.hpp>
 
+#include "Constants.h"
 #include "Board.h"
 #include "BitmapStore.h"
-
-constexpr int GrayColor = 57;
-const std::string WindowTitle = "Chess";
+#include "FileParser.h"
+#include "WindowConfiguration.h"
 
 int main()
 {		
+	FileParser parser_(Constants::WindowSettingsPath);
+	auto window_config = parser_.GetBlueprint<WindowConfiguration>();
+
 	auto video_mode = sf::VideoMode::getDesktopMode();
-	sf::RenderWindow window(video_mode, WindowTitle, sf::State::Windowed);
+	sf::RenderWindow window(video_mode, window_config.title_, window_config.state_);
 
 	chess::Board board{};
 	board.GeneratePieces();
@@ -77,7 +79,7 @@ int main()
 				if (key->scancode == sf::Keyboard::Scancode::F11)
 				{
 					current_window_status = current_window_status == sf::State::Windowed ? sf::State::Fullscreen : sf::State::Windowed;
-					window.create(video_mode, WindowTitle, current_window_status);
+					window.create(video_mode, window_config.title_, current_window_status);
 
 					window.setView(main_camera);
 				}		
@@ -87,7 +89,7 @@ int main()
 		auto time  = clock.restart();
 		auto delta = time.asSeconds();
 		
-		window.clear(sf::Color(250, 142, 200));
+		window.clear(window_config.background_color_);
 		window.draw(board);
 		window.display();
 	}

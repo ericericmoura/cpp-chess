@@ -6,12 +6,13 @@
 #include <fstream>
 
 #include "Blueprint.h"
+#include <string_view>
 
 class FileParser
 {
 public:
-	FileParser(const std::string& filepath) noexcept
-		: input_file_(filepath)
+	FileParser(std::string_view filepath) noexcept
+		: input_file_(filepath.data())
 	{
 #ifdef _DEBUG
 		if (!input_file_.good())
