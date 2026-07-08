@@ -169,7 +169,7 @@
     <ClInclude Include="DiagonalMovementComponent.h" />
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="GetFileTagByRegex.h" />
-    <ClInclude Include="get_name.h" />
+    <ClInclude Include="GetVariableName.h" />
     <ClInclude Include="LShapedMovementComponent.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="PawnMovementComponent.h" />
@@ -178,6 +178,7 @@
     <ClInclude Include="PieceType.h" />
     <ClInclude Include="StandardGraphicsComponent.h" />
     <ClInclude Include="StraightMovementComponent.h" />
+    <ClInclude Include="StringToColor.h" />
     <ClInclude Include="Team.h" />
     <ClInclude Include="Vector2Hash.h" />
     <ClInclude Include="Vector2Operators.h" />

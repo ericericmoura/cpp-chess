@@ -1,12 +1,12 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include <SFML/Window/WindowEnums.hpp>
 #include <SFML/Graphics/Color.hpp>
 
 #include "Blueprint.h"
-#include <vector>
 
 struct WindowConfiguration : public Blueprint
 {

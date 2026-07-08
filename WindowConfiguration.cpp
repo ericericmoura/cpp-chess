@@ -6,7 +6,8 @@
 #include <SFML/Window/WindowEnums.hpp>
 
 #include "GetFileTagByRegex.h"
-#include "get_name.h"
+#include "GetVariableName.h"
+#include "StringToColor.h"
 
 void WindowConfiguration::Parse(std::vector<std::string>& data) noexcept
 {
@@ -23,7 +24,7 @@ void WindowConfiguration::Parse(std::vector<std::string>& data) noexcept
 		}
 		else if (tag == GET_NAME(background_color_))
 		{
-
+			background_color_ = StringToColor(value);
 		}
 		else if (tag == GET_NAME(state_))
 		{
