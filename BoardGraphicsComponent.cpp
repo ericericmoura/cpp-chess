@@ -8,11 +8,14 @@
 
 #include "Piece.h"
 #include "Board.h"
+#include "Vector2Operators.h"
 
 void chess::BoardGraphicsComponent::UpdateCapturedPiecesPosition(const Board& board, std::vector<Piece>& inactive_black_pieces, std::vector<Piece>& inactive_white_pieces) const noexcept
 {
 	auto max_col = 2;
 	auto max_row = 8;
+
+	auto board_size_pixels = board.GetConfig().board_size_ * board.GetConfig().cell_size_;
 
 	for (auto i = 0; i < inactive_white_pieces.size(); ++i)
 	{
@@ -21,9 +24,13 @@ void chess::BoardGraphicsComponent::UpdateCapturedPiecesPosition(const Board& bo
 		auto col = i % max_col;
 		auto row = i / max_col;
 
+		sf::Vector2f offset;
+		offset.x = board.GetConfig().margin_.x + board_size_pixels.x + board.GetConfig().cell_size_.x;
+		offset.y = board.GetConfig().margin_.y;
+
 		sf::Vector2f piece_pos{};
-		piece_pos.x = board.GetConfig().margin_.x + board.GetConfig().board_size_.x + static_cast<float>(board.GetConfig().cell_size_.x) * col;
-		piece_pos.y = board.GetConfig().margin_.y + static_cast<float>(board.GetConfig().cell_size_.y) * row;
+		piece_pos.x = offset.x + board.GetConfig().cell_size_.x * col;
+		piece_pos.y = offset.y + board.GetConfig().cell_size_.y * row;
 
 		piece.setPosition(piece_pos);
 	}
@@ -35,9 +42,13 @@ void chess::BoardGraphicsComponent::UpdateCapturedPiecesPosition(const Board& bo
 		auto col = i % max_col;
 		auto row = i / max_col;
 
+		sf::Vector2f offset;
+		offset.x = 0;
+		offset.y = board.GetConfig().margin_.y;
+
 		sf::Vector2f piece_pos{};
-		piece_pos.x = board.GetConfig().margin_.x + static_cast<float>(board.GetConfig().cell_size_.x) * col;
-		piece_pos.y = board.GetConfig().margin_.y + static_cast<float>(board.GetConfig().cell_size_.y) * row;
+		piece_pos.x = offset.x + board.GetConfig().cell_size_.x * col;
+		piece_pos.y = offset.y + board.GetConfig().cell_size_.y * row;
 
 		piece.setPosition(piece_pos);
 	}

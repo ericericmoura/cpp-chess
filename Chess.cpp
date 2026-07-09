@@ -34,10 +34,14 @@ int main()
 	auto board_size   = BitmapStore::GetInstance().GetTexture(board_config.texture_key_).getSize();
 	auto display_size = video_mode.size;
 
-	auto factor = static_cast<float>(display_size.y) / display_size.x;
+	auto camera_size = board_size;
+	camera_size.x += board_config.cell_size_.x * 2;
+
+	auto camera_ratio = static_cast<float>(camera_size.x) / static_cast<float>(camera_size.y);
+	auto factor = camera_ratio * (static_cast<float>(display_size.y) / display_size.x);
 
 	sf::View main_camera{};	
-	main_camera.setSize(sf::Vector2f(board_size));
+	main_camera.setSize(sf::Vector2f(camera_size));
 	main_camera.setCenter(board.getPosition() + sf::Vector2f(board_size / 2u));
 	main_camera.setViewport({ {(1.f - factor) / 2.f, 0.f}, {factor, 1.f} });
 	window.setView(main_camera);
