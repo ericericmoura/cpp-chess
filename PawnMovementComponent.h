@@ -32,7 +32,7 @@ private:
 	void DecreasePawnMovement() noexcept;
 	
 	void CheckForEnPassant(const sf::Vector2u& previous_pos, const sf::Vector2u& current_pos, Board& board) noexcept;
-	void AllowEnPassant(sf::Vector2u at_pos) noexcept;
+	void AllowEnPassant(const Board& board, sf::Vector2u at_pos) noexcept;
 
 	bool IsPositionReachable(const sf::Vector2u& current_pos, const sf::Vector2u& target_pos, bool occupied_by_enemy) const noexcept override;
 };

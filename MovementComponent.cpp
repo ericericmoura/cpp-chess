@@ -12,7 +12,7 @@ chess::MovementComponent::MovementComponent(Piece& piece)
 
 bool chess::MovementComponent::TryMove(Board & board, const sf::Vector2u & current_pos, const sf::Vector2u & target_pos) noexcept
 {    
-    auto target_piece = board.GetPieceAt(target_pos);
+    auto target_piece = board.GetPieceAtCoordinate(target_pos);
 
     bool occupied_by_ally  = false;
     bool occupied_by_enemy = false;

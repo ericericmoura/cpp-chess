@@ -152,6 +152,7 @@
     <ClCompile Include="BitmapStore.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="BoardConfiguration.cpp" />
+    <ClCompile Include="BoardGraphicsComponent.cpp" />
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="DiagonalMovementComponent.cpp" />
     <ClCompile Include="LShapedMovementComponent.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Blueprint.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="BoardConfiguration.h" />
+    <ClInclude Include="BoardGraphicsComponent.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DiagonalMovementComponent.h" />
     <ClInclude Include="FileParser.h" />

@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <optional>
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -12,6 +13,7 @@
 #include "Vector2Hash.h"
 #include "Piece.h"
 #include "StandardGraphicsComponent.h"
+#include "BoardGraphicsComponent.h"
 #include "PieceFactory.h"
 #include "BoardConfiguration.h"
 
@@ -22,39 +24,41 @@ using PiecesMap = std::unordered_map<sf::Vector2u, Piece, Vec2uHash>;
 class Board : public sf::Transformable, public sf::Drawable
 {
 public:
-	Board(BoardConfiguration board_config);
+	Board(BoardConfiguration board_config) noexcept;
+	
 	void GeneratePieces() noexcept;	
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	
-	void SelectPosition(sf::Vector2u position) noexcept;
-	void TryMoveTo(sf::Vector2u target) noexcept;
+	void SelectCoordinate(sf::Vector2u position) noexcept;
+	void MoveSelectedPieceToCoordinate(sf::Vector2u target) noexcept;
 
-	void CaptureAt(sf::Vector2u position) noexcept;
-	const Piece* GetPieceAt(sf::Vector2u position) const noexcept;
-	bool IsPositionOccupied(const sf::Vector2u& position) const noexcept;
+	void CaptureAtCoordinate(sf::Vector2u position) noexcept;
+	const Piece* GetPieceAtCoordinate(sf::Vector2u position) const noexcept;
+	bool IsCoordinateOccupied(const sf::Vector2u& position) const noexcept;
+
+	const BoardConfiguration& GetConfig() const noexcept;
 	
-	inline bool IsPositionSelected() const noexcept
+	inline bool IsCoordinateSelected() const noexcept
 	{
-		return position_selected_;
+		return selected_coordinate_.has_value();
 	}
+	
+	sf::Vector2f GetPositionFromCoordinates(const sf::Vector2u& coordinates) const noexcept;
+	sf::Vector2u GetCoordinatesFromPosition(const sf::Vector2f& position) const noexcept;
+	bool         IsCoordinatesWithinBounds (const sf::Vector2u& position) const noexcept;
 
-	static sf::Vector2f GetPositionInPixels(sf::Vector2u board_position) noexcept;
-	static sf::Vector2u GetCoordinates     (sf::Vector2f position) noexcept;
-	static bool         IsCoordinatesValid (sf::Vector2u position) noexcept;
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
+	StandardGraphicsComponent graphics_{};
+	BoardGraphicsComponent    board_graphics_{};
+	PieceFactory factory_{};
 	BoardConfiguration board_config_{};
 
-	PieceFactory factory_{};
-
 	PiecesMap active_pieces_{};
-	std::vector<Piece> inactive_pieces_{};
+	std::vector<Piece> inactive_white_pieces_{};	
+	std::vector<Piece> inactive_black_pieces_{};
 
-	sf::Vector2u selected_position_{};
-
-	StandardGraphicsComponent graphics_{};
-
-	bool position_selected_ = false;
+	std::optional<sf::Vector2u> selected_coordinate_ {};
 };
 
-}
+} // namespace chess

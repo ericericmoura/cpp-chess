@@ -84,11 +84,14 @@
     <ClCompile Include="WindowConfiguration.cpp">
       <Filter>Source Files\FileIO\Blueprints</Filter>
     </ClCompile>
-    <ClCompile Include="BoardConfiguration.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StringToVector2.h">
       <Filter>Header Files\FileIO\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="BoardConfiguration.cpp">
+      <Filter>Source Files\FileIO\Blueprints</Filter>
+    </ClCompile>
+    <ClCompile Include="BoardGraphicsComponent.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +159,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BoardConfiguration.h">
+      <Filter>Header Files\FileIO\Blueprints</Filter>
+    </ClInclude>
+    <ClInclude Include="BoardGraphicsComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

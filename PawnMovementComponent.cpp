@@ -10,6 +10,7 @@
 #include "Team.h"
 #include "PieceType.h"
 #include "Board.h"
+#include <utility>
 
 chess::PawnMovementComponent::PawnMovementComponent(Piece& piece)
     : StraightMovementComponent(piece, 2)
@@ -21,7 +22,7 @@ bool chess::PawnMovementComponent::TryMove(Board& board, const sf::Vector2u & cu
 
     if (done_en_passant_)
     {
-        board.CaptureAt(en_passant_piece_position_);
+        board.CaptureAtCoordinate(en_passant_piece_position_);
         done_en_passant_ = false;
     }
 
@@ -51,14 +52,14 @@ bool chess::PawnMovementComponent::IsPositionReachable(const sf::Vector2u& curre
     return abs(distance_x) == abs(distance_y);
 }
 
-void chess::PawnMovementComponent::AllowEnPassant(sf::Vector2u at_pos) noexcept
+void chess::PawnMovementComponent::AllowEnPassant(const Board& board, sf::Vector2u at_pos) noexcept
 {
-    if (!chess::Board::IsCoordinatesValid(at_pos))
+    if (!board.IsCoordinatesWithinBounds(at_pos))
     {
         return;
     }
     can_do_en_passant_   = true;
-    en_passant_position_ = at_pos;
+    en_passant_position_ = std::move(at_pos);
 }
 
 void chess::PawnMovementComponent::Moved(const sf::Vector2u& previous_pos, const sf::Vector2u& current_pos, Board& board) noexcept
@@ -90,7 +91,7 @@ void chess::PawnMovementComponent::DecreasePawnMovement() noexcept
 
 void chess::PawnMovementComponent::CheckForEnPassant(const sf::Vector2u& target_pos, const sf::Vector2u& current_pos, Board& board) noexcept
 {    
-    auto nearby_piece = board.GetPieceAt(target_pos);
+    auto nearby_piece = board.GetPieceAtCoordinate(target_pos);
     if (nearby_piece == nullptr || nearby_piece->GetPieceType() != chess::PieceType::Pawn)
     {
         return;
@@ -102,6 +103,6 @@ void chess::PawnMovementComponent::CheckForEnPassant(const sf::Vector2u& target_
     }
     auto en_passant_position = current_pos;
     en_passant_position.y -= team_ == Team::Black ? 1 : -1;
-    pawn_movement_component->AllowEnPassant(en_passant_position);
+    pawn_movement_component->AllowEnPassant(board, en_passant_position);
     pawn_movement_component->en_passant_piece_position_ = current_pos;
 }

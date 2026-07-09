@@ -43,7 +43,7 @@ bool chess::StraightMovementComponent::IsPositionBlocked(const sf::Vector2u& cur
     {
         auto pos = is_vertical ? sf::Vector2u(current_pos.x, i) 
                                : sf::Vector2u(i, current_pos.y);
-        if (board.IsPositionOccupied(pos))
+        if (board.IsCoordinateOccupied(pos))
         {
             return true;
         }

@@ -13,6 +13,8 @@
 namespace chess
 {
 
+class Board;
+
 struct PiecesInformation
 {
 	std::string file_path_        = "graphics/";
@@ -36,13 +38,13 @@ using PiecesMap = std::unordered_map<sf::Vector2u, Piece, Vec2uHash>;
 class PieceFactory
 {
 public:
-	void GeneratePieces(PiecesMap& board) const noexcept;
+	void GeneratePieces(const Board& board, PiecesMap& map) const noexcept;
 
 private:
 	PiecesInformation pieces_info{};
 
 	PieceType GetPieceType(const sf::Vector2u& position) const noexcept;
-	Piece GeneratePiece(const sf::Vector2u& position, chess::Team team) const noexcept;
+	Piece GeneratePiece(const Board& board, const sf::Vector2u& position, chess::Team team) const noexcept;
 	void AttachComponentsForPiece(Piece& piece, chess::Team team, chess::PieceType type) const noexcept;
 };
 

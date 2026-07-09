@@ -24,7 +24,7 @@ class Piece : public sf::Transformable, public sf::Drawable
 
 public:
 	Piece() = default;
-	Piece(Team team, const std::string& texture_key, sf::Vector2u starting_pos) noexcept;
+	Piece(Team team, const std::string& texture_key) noexcept;
 	
 	Piece(Piece&&) noexcept = default;
 	Piece& operator=(Piece&&) noexcept = default;
@@ -35,7 +35,7 @@ public:
 	void AddMovementComponent(std::unique_ptr<MovementComponent> comp) noexcept;
 	bool TryMove(Board& board, sf::Vector2u position) noexcept;
 
-	void SetBoardPosition(sf::Vector2u pos) noexcept;
+	void SetBoardPosition(const Board& board, const sf::Vector2u& pos) noexcept;
 	Team GetTeam() const noexcept
 	{
 		return team_;

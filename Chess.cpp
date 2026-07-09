@@ -27,7 +27,7 @@ int main()
 	sf::RenderWindow window(video_mode, window_config.title_, window_config.state_);
 	auto current_window_status = window_config.state_;
 
-	chess::Board board{};
+	chess::Board board{board_config};
 	board.GeneratePieces();
 
 	// CAMERA CONFIGURATION
@@ -57,15 +57,15 @@ int main()
 				if (mouse->button == sf::Mouse::Button::Left)
 				{
 					auto mouse_position       = window.mapPixelToCoords(mouse->position, main_camera);
-					auto board_mouse_position = chess::Board::GetCoordinates(mouse_position);
+					auto board_mouse_position = board.GetCoordinatesFromPosition(mouse_position);
 
-					if (!board.IsPositionSelected())
+					if (!board.IsCoordinateSelected())
 					{
-						board.SelectPosition(board_mouse_position);
+						board.SelectCoordinate(board_mouse_position);
 					}
 					else
 					{
-						board.TryMoveTo(board_mouse_position);
+						board.MoveSelectedPieceToCoordinate(board_mouse_position);
 					}
 				}
 			}

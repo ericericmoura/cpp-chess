@@ -16,23 +16,23 @@
 #include "Team.h"
 #include "PieceType.h"
 
-void chess::PieceFactory::GeneratePieces(PiecesMap& board) const noexcept
+void chess::PieceFactory::GeneratePieces(const Board& board, PiecesMap& map) const noexcept
 {
 	for (auto i = 0; i < 16; i++)
 	{
 		auto index = static_cast<float>(i);
-		auto grid_y = static_cast<unsigned int>(floor(index / chess::Board::kBoardSize.x));
-		auto grid_x = i % chess::Board::kBoardSize.x;
+		auto grid_y = static_cast<unsigned int>(floor(index / board.GetConfig().board_size_.x));
+		auto grid_x = i % board.GetConfig().board_size_.x;
 
 		auto black_position = sf::Vector2u({ grid_x, grid_y });
 		auto white_position = black_position;
 		white_position.y += 6;
 
-		auto black_piece = GeneratePiece(black_position, chess::Team::Black);
-		auto white_piece = GeneratePiece(white_position, chess::Team::White);
+		auto black_piece = GeneratePiece(board, black_position, chess::Team::Black);
+		auto white_piece = GeneratePiece(board, white_position, chess::Team::White);
 
-		board.try_emplace(black_position, std::move(black_piece));
-		board.try_emplace(white_position, std::move(white_piece));
+		map.try_emplace(black_position, std::move(black_piece));
+		map.try_emplace(white_position, std::move(white_piece));
 	}
 }
 
@@ -65,7 +65,7 @@ chess::PieceType chess::PieceFactory::GetPieceType(const sf::Vector2u& position)
 	return PieceType::King;
 }
 
-chess::Piece chess::PieceFactory::GeneratePiece(const sf::Vector2u& position, chess::Team team) const noexcept
+chess::Piece chess::PieceFactory::GeneratePiece(const Board& board, const sf::Vector2u& position, chess::Team team) const noexcept
 {
 	// Get type
 	auto type = GetPieceType(position);
@@ -73,7 +73,9 @@ chess::Piece chess::PieceFactory::GeneratePiece(const sf::Vector2u& position, ch
 	// Get image extension
 	auto& team_name = team == chess::Team::White ? pieces_info.white_team_name_ : pieces_info.black_team_name_;
 	auto piece_path = pieces_info.file_path_ + team_name + pieces_info.piece_name_map_.at(type) + pieces_info.sprite_extension_;
-	auto piece = chess::Piece(team, piece_path, position);
+	auto piece = chess::Piece(team, piece_path);
+
+	piece.SetBoardPosition(board, position);
 	
 	AttachComponentsForPiece(piece, team, type);
 
