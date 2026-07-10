@@ -22,21 +22,21 @@ void chess::Board::GeneratePieces() noexcept
 	factory_.GeneratePieces(*this, active_pieces_);
 }
 
-void chess::Board::SelectCoordinate(sf::Vector2u coord) noexcept
+void chess::Board::SelectCoordinates(sf::Vector2u coords) noexcept
 {
-	auto it = active_pieces_.find(coord);
+	auto it = active_pieces_.find(coords);
 	if (it == active_pieces_.end())
 	{
 		return;
 	}
-	selected_coordinate_ = coord;
+	selected_coordinate_ = coords;
 }
 
-void chess::Board::MoveSelectedPieceToCoordinate(sf::Vector2u coord) noexcept
+void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u coords) noexcept
 {	
 	if (!selected_coordinate_.has_value() 
-		|| coord == selected_coordinate_
-		|| !IsCoordinatesWithinBounds(coord))
+		|| coords == selected_coordinate_
+		|| !IsCoordinatesWithinBounds(coords))
 	{
 		return;
 	}	
@@ -46,21 +46,21 @@ void chess::Board::MoveSelectedPieceToCoordinate(sf::Vector2u coord) noexcept
 	{
 		return;
 	}
-	if (!it->second.TryMove(*this, coord))
+	if (!it->second.TryMove(*this, coords))
 	{		
 		return;
 	}
-	CaptureAtCoordinate(coord);
+	CaptureAtCoordinates(coords);
 
-	it->second.SetBoardPosition(*this, coord);
+	it->second.SetBoardPosition(*this, coords);
 	auto node = active_pieces_.extract(it);
-	node.key() = coord;
+	node.key() = coords;
 	active_pieces_.insert(std::move(node));
 }
 
-void chess::Board::CaptureAtCoordinate(sf::Vector2u coord) noexcept
+void chess::Board::CaptureAtCoordinates(sf::Vector2u coords) noexcept
 {
-	auto it_target = active_pieces_.find(coord);
+	auto it_target = active_pieces_.find(coords);
 	if (it_target == active_pieces_.end())
 	{
 		return;
@@ -73,14 +73,14 @@ void chess::Board::CaptureAtCoordinate(sf::Vector2u coord) noexcept
 	{
 		inactive_black_pieces_.emplace_back(std::move(it_target->second));
 	}
-	active_pieces_.erase(coord);
+	active_pieces_.erase(coords);
 
 	board_graphics_.UpdateCapturedPiecesPosition(*this, inactive_black_pieces_, inactive_white_pieces_);
 }
 
-const chess::Piece* chess::Board::GetPieceAtCoordinate(sf::Vector2u coord) const noexcept
+const chess::Piece* chess::Board::GetPieceAtCoordinates(sf::Vector2u coords) const noexcept
 {
-	auto it = active_pieces_.find(coord);
+	auto it = active_pieces_.find(coords);
 	if (it == active_pieces_.end())
 	{
 		return nullptr;
@@ -88,9 +88,9 @@ const chess::Piece* chess::Board::GetPieceAtCoordinate(sf::Vector2u coord) const
 	return &it->second;
 }
 
-bool chess::Board::IsCoordinateOccupied(const sf::Vector2u& coord) const noexcept
+bool chess::Board::IsCoordinatesOccupied(const sf::Vector2u& coords) const noexcept
 {
-	return active_pieces_.contains(coord);
+	return active_pieces_.contains(coords);
 }
 
 void chess::Board::SetConfig(BoardConfiguration config) noexcept
@@ -104,9 +104,9 @@ const BoardConfiguration& chess::Board::GetConfig() const noexcept
 	return board_config_;
 }
 
-sf::Vector2f chess::Board::GetPositionFromCoordinates(const sf::Vector2u& coordinates) const noexcept
+sf::Vector2f chess::Board::GetPositionFromCoordinates(const sf::Vector2u& coords) const noexcept
 {
-	auto position = coordinates * board_config_.cell_size_ + board_config_.margin_;
+	auto position = coords * board_config_.cell_size_ + board_config_.margin_;
 	return sf::Vector2f(position);
 }
 
@@ -120,9 +120,9 @@ sf::Vector2u chess::Board::GetCoordinatesFromPosition(const sf::Vector2f& positi
 	return (sf::Vector2u(local) / board_config_.cell_size_);
 }
 
-bool chess::Board::IsCoordinatesWithinBounds(const sf::Vector2u& position) const noexcept
+bool chess::Board::IsCoordinatesWithinBounds(const sf::Vector2u& coords) const noexcept
 {	
-	return position >= sf::Vector2u({0, 0}) && position < board_config_.board_size_;
+	return coords >= sf::Vector2u({0, 0}) && coords < board_config_.board_size_;
 }
 
 void chess::Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -130,7 +130,7 @@ void chess::Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	states.transform *= getTransform();
 	target.draw(graphics_, states);
 
-	for (auto& [position, piece] : active_pieces_)
+	for (auto& [coords, piece] : active_pieces_)
 	{
 		target.draw(piece);
 	}

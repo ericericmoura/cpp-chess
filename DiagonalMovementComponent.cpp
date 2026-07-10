@@ -36,7 +36,7 @@ bool chess::DiagonalMovementComponent::IsPositionBlocked(const sf::Vector2u& cur
     for (auto x = start_pos.x, y = start_pos.y; x != end_pos.x; x += direction.x, y += direction.y)
     {
         auto pos = sf::Vector2u({ static_cast<unsigned int>(x), static_cast<unsigned int>(y) });
-        if (board.IsCoordinateOccupied(pos))
+        if (board.IsCoordinatesOccupied(pos))
         {
             return true;
         }

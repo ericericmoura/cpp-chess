@@ -22,7 +22,7 @@ bool chess::PawnMovementComponent::TryMove(Board& board, const sf::Vector2u & cu
 
     if (done_en_passant_)
     {
-        board.CaptureAtCoordinate(en_passant_piece_position_);
+        board.CaptureAtCoordinates(en_passant_piece_position_);
         done_en_passant_ = false;
     }
 
@@ -91,7 +91,7 @@ void chess::PawnMovementComponent::DecreasePawnMovement() noexcept
 
 void chess::PawnMovementComponent::CheckForEnPassant(const sf::Vector2u& target_pos, const sf::Vector2u& current_pos, Board& board) noexcept
 {    
-    auto nearby_piece = board.GetPieceAtCoordinate(target_pos);
+    auto nearby_piece = board.GetPieceAtCoordinates(target_pos);
     if (nearby_piece == nullptr || nearby_piece->GetPieceType() != chess::PieceType::Pawn)
     {
         return;

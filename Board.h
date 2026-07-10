@@ -29,25 +29,25 @@ public:
 
 	void GeneratePieces() noexcept;	
 	
-	void SelectCoordinate(sf::Vector2u position) noexcept;
-	void MoveSelectedPieceToCoordinate(sf::Vector2u target) noexcept;
+	void SelectCoordinates(sf::Vector2u coords) noexcept;
+	void MoveSelectedPieceToCoordinates(sf::Vector2u target) noexcept;
 
-	void CaptureAtCoordinate(sf::Vector2u position) noexcept;
+	void CaptureAtCoordinates(sf::Vector2u coords) noexcept;
 
-	const Piece* GetPieceAtCoordinate(sf::Vector2u position) const noexcept;
-	bool IsCoordinateOccupied(const sf::Vector2u& position) const noexcept;
+	const Piece* GetPieceAtCoordinates(sf::Vector2u coords) const noexcept;
+	bool IsCoordinatesOccupied(const sf::Vector2u& coords) const noexcept;
 
 	void SetConfig(BoardConfiguration config) noexcept;
 	const BoardConfiguration& GetConfig() const noexcept;
 	
-	inline bool IsCoordinateSelected() const noexcept
+	inline bool IsCoordinatesSelected() const noexcept
 	{
 		return selected_coordinate_.has_value();
 	}
 	
-	sf::Vector2f GetPositionFromCoordinates(const sf::Vector2u& coordinates) const noexcept;
+	sf::Vector2f GetPositionFromCoordinates(const sf::Vector2u& coords) const noexcept;
 	sf::Vector2u GetCoordinatesFromPosition(const sf::Vector2f& position) const noexcept;
-	bool         IsCoordinatesWithinBounds (const sf::Vector2u& position) const noexcept;
+	bool         IsCoordinatesWithinBounds (const sf::Vector2u& coords) const noexcept;
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 

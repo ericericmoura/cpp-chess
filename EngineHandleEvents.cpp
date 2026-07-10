@@ -18,13 +18,13 @@ void chess::Engine::HandleEvent(sf::Event event)
 			auto mouse_position = window_.mapPixelToCoords(mouse->position, main_camera_);
 			auto board_mouse_position = chess_board_.GetCoordinatesFromPosition(mouse_position);
 
-			if (!chess_board_.IsCoordinateSelected())
+			if (!chess_board_.IsCoordinatesSelected())
 			{
-				chess_board_.SelectCoordinate(board_mouse_position);
+				chess_board_.SelectCoordinates(board_mouse_position);
 			}
 			else
 			{
-				chess_board_.MoveSelectedPieceToCoordinate(board_mouse_position);
+				chess_board_.MoveSelectedPieceToCoordinates(board_mouse_position);
 			}
 		}
 	}

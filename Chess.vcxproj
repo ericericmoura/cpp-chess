@@ -153,7 +153,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="BoardConfiguration.cpp" />
     <ClCompile Include="BoardGraphicsComponent.cpp" />
-    <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="DiagonalMovementComponent.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="EngineRender.cpp" />

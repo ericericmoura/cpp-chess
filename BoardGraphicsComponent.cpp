@@ -32,7 +32,7 @@ void chess::BoardGraphicsComponent::DrawPieces(
 	sf::RenderTarget& target, 
 	sf::RenderStates states) const
 {
-	for (auto& [position, piece] : active_pieces_map)
+	for (auto& [coords, piece] : active_pieces_map)
 	{
 		target.draw(piece, states);
 	}
