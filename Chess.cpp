@@ -31,7 +31,7 @@ int main()
 	board.GeneratePieces();
 
 	// CAMERA CONFIGURATION
-	auto board_size   = BitmapStore::GetInstance().GetTexture(board_config.texture_key_).getSize();
+		auto board_size   = BitmapStore::GetInstance().GetTexture(board_config.texture_key_).getSize();
 	auto display_size = video_mode.size;
 
 	auto camera_size = board_size;

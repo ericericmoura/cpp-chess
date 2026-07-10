@@ -32,6 +32,7 @@ public:
 	void MoveSelectedPieceToCoordinate(sf::Vector2u target) noexcept;
 
 	void CaptureAtCoordinate(sf::Vector2u position) noexcept;
+
 	const Piece* GetPieceAtCoordinate(sf::Vector2u position) const noexcept;
 	bool IsCoordinateOccupied(const sf::Vector2u& position) const noexcept;
 

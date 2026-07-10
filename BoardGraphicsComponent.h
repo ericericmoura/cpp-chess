@@ -23,7 +23,7 @@ public:
 	void UpdateCapturedPiecesPosition(
 		const Board& board,
 		std::vector<Piece>& inactive_black_pieces,
-		std::vector<Piece>& inactive_white_pieces) const noexcept;
+		std::vector<Piece>& inactive_white_pieces) noexcept;
 
 	void DrawPieces(
 		const PiecesMap& active_pieces_map, 
@@ -31,6 +31,9 @@ public:
 		const std::vector<Piece>& inactive_white_pieces,
 		sf::RenderTarget& target, 
 		sf::RenderStates states) const;
+
+private:
+	void RepositionPieces(const Board& board, std::vector<Piece>& pieces, const sf::Vector2f& offset) noexcept;
 };
 
 } // namespace chess
