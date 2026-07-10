@@ -4,6 +4,7 @@
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowEnums.hpp>
+#include <SFML/Window/Event.hpp>
 
 #include "WindowConfiguration.h"
 #include "BoardConfiguration.h"
@@ -18,7 +19,8 @@ public:
 	Engine() noexcept;
 	void Run();
 
-	void Update();
+	void HandleEvent(sf::Event event);
+	void Update(float delta);
 	void Render();
 
 private:

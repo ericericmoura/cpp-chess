@@ -99,7 +99,7 @@
     <ClCompile Include="EngineRender.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="EngineUpdate.cpp">
+    <ClCompile Include="EngineHandleEvents.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
   </ItemGroup>

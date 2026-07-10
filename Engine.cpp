@@ -5,11 +5,7 @@
 #include <SFML/Graphics/View.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/Clock.hpp>
-#include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
-#include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/VideoMode.hpp>
-#include <SFML/Window/WindowEnums.hpp>
 
 #include "BitmapStore.h"
 #include "FileParser.h"
@@ -43,48 +39,29 @@ void chess::Engine::Run()
 	sf::Clock clock{};	
 	while (window_.isOpen())
 	{
-		// EVENTS
-		while (auto event = window_.pollEvent())
+		while (auto event_opt = window_.pollEvent())
 		{
-			if (event->is<sf::Event::Closed>())
+			if (event_opt)
 			{
-				window_.close();
-			}
-			else if (auto mouse = event->getIf<sf::Event::MouseButtonPressed>())
-			{
-				if (mouse->button == sf::Mouse::Button::Left)
-				{
-					auto mouse_position = window_.mapPixelToCoords(mouse->position, main_camera_);
-					auto board_mouse_position = chess_board_.GetCoordinatesFromPosition(mouse_position);
-
-					if (!chess_board_.IsCoordinateSelected())
-					{
-						chess_board_.SelectCoordinate(board_mouse_position);
-					}
-					else
-					{
-						chess_board_.MoveSelectedPieceToCoordinate(board_mouse_position);
-					}
-				}
-			}
-			else if (auto key = event->getIf<sf::Event::KeyPressed>())
-			{
-				if (key->scancode == sf::Keyboard::Scancode::F11)
-				{
-					window_status_ = window_status_ == sf::State::Windowed ? sf::State::Fullscreen : sf::State::Windowed;
-					CreateWindow();					
-				}
+				HandleEvent(event_opt.value());
 			}
 		}
-
 		auto time  = clock.restart ();
 		auto delta = time.asSeconds();
 
-		Update();
-
+		Update(delta);
 		Render();		
 	}
+}
 
+void chess::Engine::Update(float delta)
+{}
+
+void chess::Engine::Render()
+{
+	window_.clear(window_config_.background_color_);
+	window_.draw(chess_board_);
+	window_.display();
 }
 
 void chess::Engine::InitializeCameraForChessBoard(const sf::Vector2u& display_size, sf::View& camera, BoardConfiguration& board_config) noexcept
@@ -100,7 +77,6 @@ void chess::Engine::InitializeCameraForChessBoard(const sf::Vector2u& display_si
 	camera.setSize(sf::Vector2f(camera_size));
 	camera.setCenter(chess_board_.getPosition() + sf::Vector2f(board_size / 2u));
 	camera.setViewport({ {(1.f - factor) / 2.f, 0.f}, {factor, 1.f} });
-
 }
 
 void chess::Engine::CreateWindow() noexcept
