@@ -13,4 +13,4 @@ enum class PieceType
 	King
 };
 
-}
+} // namespace chess

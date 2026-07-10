@@ -36,6 +36,7 @@ public:
 	bool TryMove(Board& board, sf::Vector2u position) noexcept;
 
 	void SetBoardPosition(const Board& board, const sf::Vector2u& pos) noexcept;
+	
 	Team GetTeam() const noexcept
 	{
 		return team_;
@@ -69,4 +70,4 @@ private:
 	PieceType type_{};
 };
 
-}
+} // namespace chess

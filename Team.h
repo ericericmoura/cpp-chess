@@ -9,4 +9,4 @@ enum class Team
 	Black
 };
 
-}
+} // namespace chess

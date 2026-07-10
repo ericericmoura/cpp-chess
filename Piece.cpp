@@ -47,7 +47,9 @@ void chess::Piece::SetBoardPosition(const Board& board, const sf::Vector2u& pos)
 	{
 		return;
 	}
-	setPosition(board.GetPositionFromCoordinates(pos) + sf::Vector2f(board.GetConfig().cell_size_ / 2u));
+	sf::Vector2f centered_position = board.GetPositionFromCoordinates(pos);
+	centered_position += sf::Vector2f(board.GetConfig().cell_size_ / 2u);
+	setPosition(centered_position);
 }
 
 void chess::Piece::draw(sf::RenderTarget& target, sf::RenderStates states) const

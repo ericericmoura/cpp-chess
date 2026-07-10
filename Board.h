@@ -24,8 +24,9 @@ using PiecesMap = std::unordered_map<sf::Vector2u, Piece, Vec2uHash>;
 class Board : public sf::Transformable, public sf::Drawable
 {
 public:
+	Board() = default;
 	Board(BoardConfiguration board_config) noexcept;
-	
+
 	void GeneratePieces() noexcept;	
 	
 	void SelectCoordinate(sf::Vector2u position) noexcept;
@@ -36,6 +37,7 @@ public:
 	const Piece* GetPieceAtCoordinate(sf::Vector2u position) const noexcept;
 	bool IsCoordinateOccupied(const sf::Vector2u& position) const noexcept;
 
+	void SetConfig(BoardConfiguration config) noexcept;
 	const BoardConfiguration& GetConfig() const noexcept;
 	
 	inline bool IsCoordinateSelected() const noexcept

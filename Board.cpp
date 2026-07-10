@@ -93,6 +93,11 @@ bool chess::Board::IsCoordinateOccupied(const sf::Vector2u& coord) const noexcep
 	return active_pieces_.contains(coord);
 }
 
+void chess::Board::SetConfig(BoardConfiguration config) noexcept
+{
+	board_config_ = config;
+}
+
 const BoardConfiguration& chess::Board::GetConfig() const noexcept
 {
 	return board_config_;

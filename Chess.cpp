@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/VideoMode.hpp>
@@ -18,24 +20,26 @@
 int main()
 {		
 	FileParser window_parser(Constants::WindowSettingsPath);
-	const auto window_config = window_parser.GetBlueprint<WindowConfiguration>();
+	auto window_config_opt = window_parser.GetBlueprint<WindowConfiguration>();	
 
 	FileParser board_parser(Constants::BoardSettingsPath);
-	const auto board_config = board_parser.GetBlueprint<BoardConfiguration>();
+	auto board_config_opt = board_parser.GetBlueprint<BoardConfiguration>();
+	
+	assert(board_config_opt && window_config_opt);
 
 	auto video_mode = sf::VideoMode::getDesktopMode();
-	sf::RenderWindow window(video_mode, window_config.title_, window_config.state_);
-	auto current_window_status = window_config.state_;
+	sf::RenderWindow window(video_mode, window_config_opt->title_, window_config_opt->state_);
+	auto current_window_status = window_config_opt->state_;
 
-	chess::Board board{board_config};
+	chess::Board board{ board_config_opt.value_or({}) };
 	board.GeneratePieces();
 
 	// CAMERA CONFIGURATION
-		auto board_size   = BitmapStore::GetInstance().GetTexture(board_config.texture_key_).getSize();
+	auto board_size   = BitmapStore::GetInstance().GetTexture(board_config_opt->texture_key_).getSize();
 	auto display_size = video_mode.size;
 
 	auto camera_size = board_size;
-	camera_size.x += board_config.cell_size_.x * 2;
+	camera_size.x += board_config_opt->cell_size_.x * 2;
 
 	auto camera_ratio = static_cast<float>(camera_size.x) / static_cast<float>(camera_size.y);
 	auto factor = camera_ratio * (static_cast<float>(display_size.y) / display_size.x);
@@ -78,7 +82,7 @@ int main()
 				if (key->scancode == sf::Keyboard::Scancode::F11)
 				{
 					current_window_status = current_window_status == sf::State::Windowed ? sf::State::Fullscreen : sf::State::Windowed;
-					window.create(video_mode, window_config.title_, current_window_status);
+					window.create(video_mode, window_config_opt->title_, current_window_status);
 
 					window.setView(main_camera);
 				}		
@@ -88,7 +92,7 @@ int main()
 		auto time  = clock.restart();
 		auto delta = time.asSeconds();
 		
-		window.clear(window_config.background_color_);
+		window.clear(window_config_opt->background_color_);
 		window.draw(board);
 		window.display();
 	}

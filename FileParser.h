@@ -4,9 +4,11 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <string_view>
+#include <optional>
+#include <utility>
 
 #include "Blueprint.h"
-#include <string_view>
 
 class FileParser
 {
@@ -23,30 +25,30 @@ public:
 	}
 
 	template<BlueprintDerived BP>	
-	BP GetBlueprint()
+	std::optional<BP> GetBlueprint()
 	{
-		std::vector<std::string> data{};
-		if (!GetRawData(data))
+		auto data = GetRawData();
+		if (!data.has_value())
 		{
 			return {};
 		}
 		BP blueprint{};
-		blueprint.Parse(data);
+		blueprint.Parse(data.value());
 		return blueprint;
 	}
 
-	bool GetRawData(std::vector<std::string>& out)
+	std::optional<std::vector<std::string>> GetRawData()
 	{
 		if (!input_file_.is_open())
 		{
-			return false;
+			return {};
 		}
-		out.clear();
+		std::optional<std::vector<std::string>> result(std::in_place);
 		for (std::string line; std::getline(input_file_, line);)
 		{
-			out.push_back(line);
+			result->push_back(line);
 		}
-		return true;
+		return result;
 	}
 
 private:
