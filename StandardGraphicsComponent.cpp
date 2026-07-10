@@ -1,6 +1,7 @@
 #include "StandardGraphicsComponent.h"
 
 #include <string>
+#include <utility>
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -20,6 +21,11 @@ sf::Vector2u chess::StandardGraphicsComponent::GetTextureSize() const noexcept
 		return {};
 	}
 	return BitmapStore::GetInstance().GetTexture(texture_key_).getSize();
+}
+
+void chess::StandardGraphicsComponent::SetTextureKey(std::string key) noexcept
+{
+	texture_key_ = std::move(key);
 }
 
 void chess::StandardGraphicsComponent::draw(sf::RenderTarget& target, sf::RenderStates states) const

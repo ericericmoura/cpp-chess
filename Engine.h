@@ -18,16 +18,22 @@ public:
 	Engine() noexcept;
 	void Run();
 
+	void Update();
+	void Render();
+
 private:
 	WindowConfiguration window_config_{};
 	BoardConfiguration  board_config_ {};
 
 	sf::RenderWindow window_{};
 	sf::VideoMode    current_video_mode_{};
-	sf::State window_status_{};
-	sf::View  main_camera   {};
+	sf::State	     window_status_{};
+	sf::View         main_camera_  {};
 
 	Board chess_board_{};
+
+	void InitializeCameraForChessBoard(const sf::Vector2u& display_size, sf::View& camera, BoardConfiguration& board_config) noexcept;
+	void CreateWindow() noexcept;
 };
 
 } // namespace chess

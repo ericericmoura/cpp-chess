@@ -16,6 +16,8 @@ public:
 	StandardGraphicsComponent(const std::string& texture_key) noexcept;
 
 	sf::Vector2u GetTextureSize() const noexcept;
+
+	void SetTextureKey(std::string key) noexcept;
 	
 	void CenterOrigin(bool value) noexcept
 	{

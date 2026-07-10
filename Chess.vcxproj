@@ -156,6 +156,8 @@
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="DiagonalMovementComponent.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="EngineRender.cpp" />
+    <ClCompile Include="EngineUpdate.cpp" />
     <ClCompile Include="LShapedMovementComponent.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="PawnMovementComponent.cpp" />
