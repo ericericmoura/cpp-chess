@@ -19,7 +19,9 @@ chess::Board::Board(file_io::BoardConfiguration board_config) noexcept
 
 void chess::Board::GeneratePieces() noexcept
 {
-	factory_.GeneratePieces(*this, active_pieces_);
+	auto info = factory_.GeneratePieces(*this, active_pieces_);
+	white_king_coords_ = info.white_king_coords_;
+	black_king_coords_ = info.black_king_coords_;
 }
 
 void chess::Board::SelectCoordinates(sf::Vector2u coords) noexcept
@@ -42,7 +44,7 @@ void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u coords) noexcept
 	}	
 	auto it = active_pieces_.find(*selected_coordinate_);
 	selected_coordinate_ = {};
-	if (it == active_pieces_.end())
+	if (it == active_pieces_.end() || it->second.GetTeam() != team_to_play_)
 	{
 		return;
 	}
@@ -56,6 +58,8 @@ void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u coords) noexcept
 	auto node = active_pieces_.extract(it);
 	node.key() = coords;
 	active_pieces_.insert(std::move(node));
+
+	team_to_play_ = team_to_play_ == Team::White ? Team::Black : Team::White;
 }
 
 void chess::Board::CaptureAtCoordinates(sf::Vector2u coords) noexcept

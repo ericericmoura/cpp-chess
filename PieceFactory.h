@@ -9,6 +9,7 @@
 #include "Vector2Hash.h"
 #include "PieceType.h"
 #include "Team.h"
+#include "GeneratedBoardInfo.h"
 
 namespace chess
 {
@@ -38,13 +39,13 @@ using PiecesMap = std::unordered_map<sf::Vector2u, Piece, Vec2uHash>;
 class PieceFactory
 {
 public:
-	void GeneratePieces(const Board& board, PiecesMap& map) const noexcept;
+	GeneratedBoardInfo GeneratePieces(const Board& board, PiecesMap& map) const noexcept;
 
 private:
 	PiecesInformation pieces_info{};
 
-	PieceType GetPieceType(const sf::Vector2u& position) const noexcept;
-	Piece GeneratePiece(const Board& board, const sf::Vector2u& position, chess::Team team) const noexcept;
+	PieceType GetPieceType(const sf::Vector2u& coords) const noexcept;
+	Piece GeneratePiece(const Board& board, const sf::Vector2u& coords, chess::Team team) const noexcept;
 	void AttachComponentsForPiece(Piece& piece, chess::Team team, chess::PieceType type) const noexcept;
 };
 

@@ -16,6 +16,7 @@
 #include "BoardGraphicsComponent.h"
 #include "PieceFactory.h"
 #include "BoardConfiguration.h"
+#include "Team.h"
 
 namespace chess {
 
@@ -59,9 +60,14 @@ private:
 
 	PiecesMap active_pieces_{};
 	std::vector<Piece> inactive_white_pieces_{};	
-	std::vector<Piece> inactive_black_pieces_{};
+	std::vector<Piece> inactive_black_pieces_{};	
 
 	std::optional<sf::Vector2u> selected_coordinate_ {};
+
+	Team team_to_play_ = Team::White;
+
+	sf::Vector2u white_king_coords_{};
+	sf::Vector2u black_king_coords_{};
 };
 
 } // namespace chess

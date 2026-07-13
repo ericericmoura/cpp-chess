@@ -15,67 +15,78 @@
 #include "Piece.h"
 #include "Team.h"
 #include "PieceType.h"
+#include "GeneratedBoardInfo.h"
 
-void chess::PieceFactory::GeneratePieces(const Board& board, PiecesMap& map) const noexcept
+chess::GeneratedBoardInfo chess::PieceFactory::GeneratePieces(const Board& board, PiecesMap& map) const noexcept
 {
+	GeneratedBoardInfo board_info{};
 	for (auto i = 0; i < 16; i++)
 	{
 		auto index = static_cast<float>(i);
 		auto grid_y = static_cast<unsigned int>(floor(index / board.GetConfig().board_size_.x));
 		auto grid_x = i % board.GetConfig().board_size_.x;
 
-		auto black_position = sf::Vector2u({ grid_x, grid_y });
-		auto white_position = black_position;
-		white_position.y += 6;
+		auto black_coords = sf::Vector2u({ grid_x, grid_y });
+		auto white_coords = black_coords;
+		white_coords.y += 6;
 
-		auto black_piece = GeneratePiece(board, black_position, chess::Team::Black);
-		auto white_piece = GeneratePiece(board, white_position, chess::Team::White);
+		auto black_piece = GeneratePiece(board, black_coords, chess::Team::Black);
+		auto white_piece = GeneratePiece(board, white_coords, chess::Team::White);
 
-		map.try_emplace(black_position, std::move(black_piece));
-		map.try_emplace(white_position, std::move(white_piece));
+		if (white_piece.GetPieceType() == PieceType::King)
+		{
+			board_info.white_king_coords_ = white_coords;
+		}
+		if (black_piece.GetPieceType() == PieceType::King)
+		{
+			board_info.black_king_coords_ = black_coords;
+		}
+		map.try_emplace(black_coords, std::move(black_piece));
+		map.try_emplace(white_coords, std::move(white_piece));
 	}
+	return board_info;
 }
 
-chess::PieceType chess::PieceFactory::GetPieceType(const sf::Vector2u& position) const noexcept
+chess::PieceType chess::PieceFactory::GetPieceType(const sf::Vector2u& coords) const noexcept
 {
-	if (position.y == 1 || position.y == 6)
+	if (coords.y == 1 || coords.y == 6)
 	{
 		return PieceType::Pawn;
 	}
-	if (position.x == 0 || position.x == 7)
+	if (coords.x == 0 || coords.x == 7)
 	{
 		return PieceType::Rook;
 	}
-	if (position.x == 1 || position.x == 6)
+	if (coords.x == 1 || coords.x == 6)
 	{
 		return PieceType::Knight;
 	}
-	if (position.x == 2 || position.x == 5)
+	if (coords.x == 2 || coords.x == 5)
 	{
 		return PieceType::Bishop;
 	}
-	if (position.x == 2 || position.x == 5)
+	if (coords.x == 2 || coords.x == 5)
 	{
 		return PieceType::Bishop;
 	}
-	if (position.x == 3)
+	if (coords.x == 3)
 	{
 		return PieceType::Queen;
 	}
 	return PieceType::King;
 }
 
-chess::Piece chess::PieceFactory::GeneratePiece(const Board& board, const sf::Vector2u& position, chess::Team team) const noexcept
+chess::Piece chess::PieceFactory::GeneratePiece(const Board& board, const sf::Vector2u& coords, chess::Team team) const noexcept
 {
 	// Get type
-	auto type = GetPieceType(position);
+	auto type = GetPieceType(coords);
 	
 	// Get image extension
 	auto& team_name = team == chess::Team::White ? pieces_info.white_team_name_ : pieces_info.black_team_name_;
 	auto piece_path = pieces_info.file_path_ + team_name + pieces_info.piece_name_map_.at(type) + pieces_info.sprite_extension_;
 	auto piece = chess::Piece(team, piece_path);
 
-	piece.SetBoardPosition(board, position);
+	piece.SetBoardPosition(board, coords);
 	
 	AttachComponentsForPiece(piece, team, type);
 

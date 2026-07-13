@@ -176,5 +176,8 @@
     <ClInclude Include="BoardGraphicsComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="GeneratedBoardInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

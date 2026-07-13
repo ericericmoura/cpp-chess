@@ -178,6 +178,7 @@
     <ClInclude Include="DiagonalMovementComponent.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="FileParser.h" />
+    <ClInclude Include="GeneratedBoardInfo.h" />
     <ClInclude Include="GetFileTagByRegex.h" />
     <ClInclude Include="GET_NAME.h" />
     <ClInclude Include="LShapedMovementComponent.h" />
