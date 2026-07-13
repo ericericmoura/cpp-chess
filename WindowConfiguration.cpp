@@ -9,7 +9,7 @@
 #include "GET_NAME.h"
 #include "StringToColor.h"
 
-void WindowConfiguration::Parse(std::vector<std::string>& data)
+void chess::file_io::WindowConfiguration::Parse(std::vector<std::string>& data)
 {
 	for (const auto& line : data)
 	{
@@ -33,7 +33,7 @@ void WindowConfiguration::Parse(std::vector<std::string>& data)
 	}
 }
 
-sf::State WindowConfiguration::GetStateFromString(const std::string& value) const noexcept
+sf::State chess::file_io::WindowConfiguration::GetStateFromString(const std::string& value) const noexcept
 {
 	if (value == "windowed")
 	{

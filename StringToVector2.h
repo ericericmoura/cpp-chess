@@ -6,6 +6,9 @@
 
 #include <SFML/System/Vector2.hpp>
 
+namespace chess
+{
+
 template <typename T>
 inline sf::Vector2<T> StringToVector2(const std::string& value)
 {
@@ -28,3 +31,5 @@ inline sf::Vector2<T> StringToVector2(const std::string& value)
     vector.y = static_cast<T>(std::stof(result.at(1)));
     return vector;
 }
+
+} // namespace chess

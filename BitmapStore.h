@@ -5,12 +5,15 @@
 
 #include <SFML/Graphics/Texture.hpp>
 
+namespace chess
+{
+
 class BitmapStore
 {
 public:
 	BitmapStore(BitmapStore&&) = delete;
 	BitmapStore& operator=(BitmapStore&&) = delete;
-	BitmapStore(const BitmapStore&)  = delete;
+	BitmapStore(const BitmapStore&) = delete;
 	BitmapStore& operator=(const BitmapStore&) = delete;
 
 	static BitmapStore& GetInstance() noexcept;
@@ -23,3 +26,4 @@ private:
 	BitmapStore() = default;
 };
 
+} // namespace chess

@@ -8,11 +8,16 @@
 
 #include "Blueprint.h"
 
+namespace chess
+{
+namespace file_io
+{
+
 struct WindowConfiguration : public Blueprint
 {
 	std::string title_ = "";
 
-	sf::State state_           {};
+	sf::State state_{};
 	sf::Color background_color_{};
 
 	void Parse(std::vector<std::string>& data) override;
@@ -20,3 +25,6 @@ struct WindowConfiguration : public Blueprint
 private:
 	sf::State GetStateFromString(const std::string& value) const noexcept;
 };
+
+} // namespace file_io
+} // namespace chess

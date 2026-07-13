@@ -48,4 +48,4 @@ private:
 	void AttachComponentsForPiece(Piece& piece, chess::Team team, chess::PieceType type) const noexcept;
 };
 
-}
+} // namespace chess

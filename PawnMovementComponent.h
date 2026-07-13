@@ -37,4 +37,4 @@ private:
 	bool IsPositionReachable(const sf::Vector2u& current_pos, const sf::Vector2u& target_pos, bool occupied_by_enemy) const noexcept override;
 };
 
-}
+} // namespace chess

@@ -15,11 +15,11 @@
 
 chess::Engine::Engine() noexcept
 {
-	FileParser window_parser(Constants::WindowSettingsPath);
-	auto window_config_opt = window_parser.GetBlueprint<WindowConfiguration>();
+	file_io::FileParser window_parser(constants::WindowSettingsPath);
+	auto window_config_opt = window_parser.GetBlueprint<file_io::WindowConfiguration>();
 
-	FileParser board_parser(Constants::BoardSettingsPath);
-	auto board_config_opt = board_parser.GetBlueprint<BoardConfiguration>();
+	file_io::FileParser board_parser(constants::BoardSettingsPath);
+	auto board_config_opt = board_parser.GetBlueprint<file_io::BoardConfiguration>();
 
 	assert(board_config_opt && window_config_opt);
 	window_config_ = window_config_opt.value();
@@ -64,7 +64,7 @@ void chess::Engine::Render()
 	window_.display();
 }
 
-void chess::Engine::InitializeCameraForChessBoard(const sf::Vector2u& display_size, sf::View& camera, BoardConfiguration& board_config) noexcept
+void chess::Engine::InitializeCameraForChessBoard(const sf::Vector2u& display_size, sf::View& camera, file_io::BoardConfiguration& board_config) noexcept
 {
 	auto board_size = BitmapStore::GetInstance().GetTexture(board_config.texture_key_).getSize();
 

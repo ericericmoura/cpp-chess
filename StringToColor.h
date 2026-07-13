@@ -6,9 +6,12 @@
 
 #include <SFML/Graphics/Color.hpp>
 
+namespace chess
+{
+
 inline sf::Color StringToColor(const std::string& value) noexcept
 {
-	std::stringstream ss(value);
+    std::stringstream ss(value);
     std::vector<std::string> result;
 
     while (ss.good())
@@ -32,3 +35,5 @@ inline sf::Color StringToColor(const std::string& value) noexcept
     }
     return color;
 }
+
+} // namespace chess

@@ -5,13 +5,13 @@
 
 #include <SFML/Graphics/Texture.hpp>
 
-BitmapStore& BitmapStore::GetInstance() noexcept
+chess::BitmapStore& chess::BitmapStore::GetInstance() noexcept
 {
 	static BitmapStore instance;
 	return instance;
 }
 
-sf::Texture& BitmapStore::GetTexture(const std::string& key) const noexcept
+sf::Texture& chess::BitmapStore::GetTexture(const std::string& key) const noexcept
 {
 	auto it = bitmaps_.find(key);
 	if (it == bitmaps_.end())

@@ -12,7 +12,7 @@
 #include "BoardConfiguration.h"
 #include "Team.h"
 
-chess::Board::Board(BoardConfiguration board_config) noexcept
+chess::Board::Board(file_io::BoardConfiguration board_config) noexcept
 	: board_config_{board_config}
 	, graphics_    {board_config.texture_key_} 
 {}
@@ -93,13 +93,13 @@ bool chess::Board::IsCoordinatesOccupied(const sf::Vector2u& coords) const noexc
 	return active_pieces_.contains(coords);
 }
 
-void chess::Board::SetConfig(BoardConfiguration config) noexcept
+void chess::Board::SetConfig(file_io::BoardConfiguration config) noexcept
 {
 	board_config_ = config;	
 	graphics_.SetTextureKey(config.texture_key_);
 }
 
-const BoardConfiguration& chess::Board::GetConfig() const noexcept
+const chess::file_io::BoardConfiguration& chess::Board::GetConfig() const noexcept
 {
 	return board_config_;
 }

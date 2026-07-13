@@ -22,4 +22,4 @@ protected:
 	virtual bool IsPositionBlocked  (const sf::Vector2u& current_pos, const sf::Vector2u& target_pos, Board& board) const noexcept override;
 };
 
-}
+} // namespace chess

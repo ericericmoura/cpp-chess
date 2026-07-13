@@ -7,7 +7,7 @@
 #include "StringToVector2.h"
 #include "GET_NAME.h"
 
-void BoardConfiguration::Parse(std::vector<std::string>& data)
+void chess::file_io::BoardConfiguration::Parse(std::vector<std::string>& data)
 {
 	for (const auto& line : data)
 	{

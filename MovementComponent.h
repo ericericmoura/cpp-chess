@@ -35,4 +35,4 @@ protected:
 		Board& board) noexcept {};
 };
 
-}
+} // namespace chess

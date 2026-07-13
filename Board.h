@@ -25,7 +25,7 @@ class Board : public sf::Transformable, public sf::Drawable
 {
 public:
 	Board() = default;
-	Board(BoardConfiguration board_config) noexcept;
+	Board(file_io::BoardConfiguration board_config) noexcept;
 
 	void GeneratePieces() noexcept;	
 	
@@ -37,8 +37,8 @@ public:
 	const Piece* GetPieceAtCoordinates(sf::Vector2u coords) const noexcept;
 	bool IsCoordinatesOccupied(const sf::Vector2u& coords) const noexcept;
 
-	void SetConfig(BoardConfiguration config) noexcept;
-	const BoardConfiguration& GetConfig() const noexcept;
+	void SetConfig(file_io::BoardConfiguration config) noexcept;
+	const file_io::BoardConfiguration& GetConfig() const noexcept;
 	
 	inline bool IsCoordinatesSelected() const noexcept
 	{
@@ -55,7 +55,7 @@ private:
 	StandardGraphicsComponent graphics_{};
 	BoardGraphicsComponent    board_graphics_{};
 	PieceFactory factory_{};
-	BoardConfiguration board_config_{};
+	file_io::BoardConfiguration board_config_{};
 
 	PiecesMap active_pieces_{};
 	std::vector<Piece> inactive_white_pieces_{};	

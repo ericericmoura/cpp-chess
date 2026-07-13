@@ -10,6 +10,11 @@
 
 #include "Blueprint.h"
 
+namespace chess
+{
+namespace file_io
+{
+
 class FileParser
 {
 public:
@@ -54,3 +59,6 @@ public:
 private:
 	std::ifstream input_file_{};
 };
+
+} // namespace file_io
+} // namespace chess

@@ -32,4 +32,4 @@ private:
 	bool center_origin_ = false;
 };
 
-}
+} // namespace chess
