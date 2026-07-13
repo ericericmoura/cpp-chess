@@ -10,7 +10,7 @@ chess::MovementComponent::MovementComponent(Piece& piece)
     , type_(piece.GetPieceType())
 {}
 
-bool chess::MovementComponent::TryMove(Board & board, const sf::Vector2u & current_pos, const sf::Vector2u & target_pos) noexcept
+bool chess::MovementComponent::CanMoveTo(Board & board, const sf::Vector2u & current_pos, const sf::Vector2u & target_pos) noexcept
 {    
     auto target_piece = board.GetPieceAtCoordinates(target_pos);
 
@@ -26,11 +26,6 @@ bool chess::MovementComponent::TryMove(Board & board, const sf::Vector2u & curre
         !occupied_by_ally
         && IsPositionReachable(current_pos, target_pos, occupied_by_enemy)
         && !IsPositionBlocked(current_pos, target_pos, board);
-
-    if (is_position_valid)
-    {
-        Moved(current_pos, target_pos, board);
-    }
 
     return is_position_valid;
 }

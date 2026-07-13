@@ -28,11 +28,11 @@ void chess::Piece::AddMovementComponent(std::unique_ptr<MovementComponent> comp)
 	movement_components_.emplace_back(std::move(comp));
 }
 
-bool chess::Piece::TryMove(Board& board, sf::Vector2u position) noexcept
+bool chess::Piece::CanMoveTo(Board& board, sf::Vector2u coords) noexcept
 {
 	for (auto& comp : movement_components_)
 	{
-		auto success = comp->TryMove(board, board.GetCoordinatesFromPosition(getPosition()), position);
+		auto success = comp->CanMoveTo(board, board.GetCoordinatesFromPosition(getPosition()), coords);
 		if (success)
 		{
 			return true;
@@ -41,13 +41,21 @@ bool chess::Piece::TryMove(Board& board, sf::Vector2u position) noexcept
 	return false;
 }
 
-void chess::Piece::SetBoardPosition(const Board& board, const sf::Vector2u& pos) noexcept
+void chess::Piece::Moved(Board& board, sf::Vector2u previous_coords) noexcept
 {
-	if (!board.IsCoordinatesWithinBounds(pos))
+	for (auto& comp : movement_components_)
+	{
+		comp->Moved(previous_coords, board.GetCoordinatesFromPosition(getPosition()), board);
+	}
+}
+
+void chess::Piece::SetCoordinates(const Board& board, const sf::Vector2u& coords) noexcept
+{
+	if (!board.IsCoordinatesWithinBounds(coords))
 	{
 		return;
 	}
-	sf::Vector2f centered_position = board.GetPositionFromCoordinates(pos);
+	sf::Vector2f centered_position = board.GetPositionFromCoordinates(coords);
 	centered_position += sf::Vector2f(board.GetConfig().cell_size_ / 2u);
 	setPosition(centered_position);
 }

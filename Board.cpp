@@ -11,6 +11,7 @@
 #include "Vector2Operators.h"
 #include "BoardConfiguration.h"
 #include "Team.h"
+#include "PieceType.h"
 
 chess::Board::Board(file_io::BoardConfiguration board_config) noexcept
 	: board_config_{board_config}
@@ -34,32 +35,48 @@ void chess::Board::SelectCoordinates(sf::Vector2u coords) noexcept
 	selected_coordinate_ = coords;
 }
 
-void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u coords) noexcept
+void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords) noexcept
 {	
-	if (!selected_coordinate_.has_value() 
-		|| coords == selected_coordinate_
-		|| !IsCoordinatesWithinBounds(coords))
+	bool invalid_selected_coords_ = !selected_coordinate_.has_value() 
+									|| target_coords == selected_coordinate_
+									|| !IsCoordinatesWithinBounds(target_coords);
+	if (invalid_selected_coords_)
 	{
 		return;
 	}	
 	auto it = active_pieces_.find(*selected_coordinate_);
+	auto previous_coords = selected_coordinate_.value();
 	selected_coordinate_ = {};
-	if (it == active_pieces_.end() || it->second.GetTeam() != team_to_play_)
+
+	auto piece_team = it->second.GetTeam();
+	bool invalid_piece = it == active_pieces_.end() || it->second.GetTeam() != team_to_play_;
+	if (invalid_piece || !it->second.CanMoveTo(*this, target_coords))
 	{
 		return;
 	}
-	if (!it->second.TryMove(*this, coords))
-	{		
-		return;
-	}
-	CaptureAtCoordinates(coords);
+	CaptureAtCoordinates(target_coords);
 
-	it->second.SetBoardPosition(*this, coords);
-	auto node = active_pieces_.extract(it);
-	node.key() = coords;
+	it->second.SetCoordinates(*this, target_coords);
+	it->second.Moved(*this, previous_coords);
+
+	auto piece_type = it->second.GetPieceType();
+
+	auto node  = active_pieces_.extract(it);
+	node.key() = target_coords;
 	active_pieces_.insert(std::move(node));
 
 	team_to_play_ = team_to_play_ == Team::White ? Team::Black : Team::White;
+
+	if (piece_type != PieceType::King)
+	{
+		return;
+	}
+	if (piece_team == Team::Black)
+	{
+		black_king_coords_ = target_coords;
+		return;
+	}
+	white_king_coords_ = target_coords;
 }
 
 void chess::Board::CaptureAtCoordinates(sf::Vector2u coords) noexcept

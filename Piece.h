@@ -33,9 +33,11 @@ public:
 	Piece& operator=(const Piece&) = delete;
 
 	void AddMovementComponent(std::unique_ptr<MovementComponent> comp) noexcept;
-	bool TryMove(Board& board, sf::Vector2u position) noexcept;
+	
+	bool CanMoveTo(Board& board, sf::Vector2u coords) noexcept;
+	void Moved    (Board& board, sf::Vector2u previous_coords) noexcept;
 
-	void SetBoardPosition(const Board& board, const sf::Vector2u& pos) noexcept;
+	void SetCoordinates(const Board& board, const sf::Vector2u& coords) noexcept;
 	
 	Team GetTeam() const noexcept
 	{

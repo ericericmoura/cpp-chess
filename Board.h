@@ -31,7 +31,7 @@ public:
 	void GeneratePieces() noexcept;	
 	
 	void SelectCoordinates(sf::Vector2u coords) noexcept;
-	void MoveSelectedPieceToCoordinates(sf::Vector2u target) noexcept;
+	void MoveSelectedPieceToCoordinates(sf::Vector2u target_coords) noexcept;
 
 	void CaptureAtCoordinates(sf::Vector2u coords) noexcept;
 
