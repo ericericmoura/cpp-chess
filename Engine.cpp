@@ -82,4 +82,5 @@ void chess::Engine::InitializeCameraForChessBoard(const sf::Vector2u& display_si
 void chess::Engine::CreateWindow() noexcept
 {
 	window_.create(current_video_mode_, window_config_.title_, window_status_);
+	window_.setView(main_camera_);
 }
