@@ -109,6 +109,10 @@ bool chess::Board::MoveIfValid(sf::Vector2u starting_coords, sf::Vector2u target
 	if (!IsKingInCheck(team_to_play_))
 	{
 		it->second.Moved(*this, starting_coords);
+		if (captured_piece.has_value())
+		{
+			AddInactivePiece(std::move(captured_piece.value()));
+		}
 		return true;
 	}
 	SwapPieceCoordinates(target_coords, starting_coords);
@@ -131,6 +135,19 @@ bool chess::Board::MoveIfValid(sf::Vector2u starting_coords, sf::Vector2u target
 		UpdateKingCoordinates(team_to_play_, starting_coords);
 	}
 	return false;
+}
+
+void chess::Board::AddInactivePiece(Piece&& piece)
+{
+	if (piece.GetTeam() == Team::White)
+	{
+		inactive_white_pieces_.emplace_back(std::move(piece));
+	}
+	else
+	{
+		inactive_black_pieces_.emplace_back(std::move(piece));
+	}
+	board_graphics_.UpdateCapturedPiecesPosition(*this, inactive_black_pieces_, inactive_white_pieces_);
 }
 
 std::optional<chess::Piece> chess::Board::CaptureAtCoordinates(sf::Vector2u coords) noexcept

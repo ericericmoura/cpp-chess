@@ -34,6 +34,8 @@ public:
 	void MoveSelectedPieceToCoordinates(sf::Vector2u target_coords);
 	bool MoveIfValid(sf::Vector2u starting_coords, sf::Vector2u target_coords);
 
+	void AddInactivePiece(Piece&& piece);
+
 	std::optional<Piece> CaptureAtCoordinates(sf::Vector2u coords) noexcept;
 
 	const Piece* GetPieceAtCoordinates(sf::Vector2u coords) const noexcept;
