@@ -86,7 +86,9 @@ chess::Piece chess::PieceFactory::GeneratePiece(const Board& board, const sf::Ve
 	auto piece_path = pieces_info.file_path_ + team_name + pieces_info.piece_name_map_.at(type) + pieces_info.sprite_extension_;
 	auto piece = chess::Piece(team, piece_path);
 
-	piece.SetCoordinates(board, coords);
+	piece.SetPieceType(type);
+
+	piece.SetCoordinates(board, coords);	
 	
 	AttachComponentsForPiece(piece, team, type);
 

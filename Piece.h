@@ -34,7 +34,7 @@ public:
 
 	void AddMovementComponent(std::unique_ptr<MovementComponent> comp) noexcept;
 	
-	bool CanMoveTo(Board& board, sf::Vector2u coords) noexcept;
+	bool CanMoveTo(const Board& board, sf::Vector2u coords) const noexcept;
 	void Moved    (Board& board, sf::Vector2u previous_coords) noexcept;
 
 	void SetCoordinates(const Board& board, const sf::Vector2u& coords) noexcept;
@@ -47,6 +47,11 @@ public:
 	PieceType GetPieceType() const noexcept
 	{
 		return type_;
+	}
+
+	void SetPieceType(PieceType type) noexcept
+	{
+		type_ = type;
 	}
 
 	template <typename T>

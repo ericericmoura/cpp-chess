@@ -31,9 +31,10 @@ public:
 	void GeneratePieces() noexcept;	
 	
 	void SelectCoordinates(sf::Vector2u coords) noexcept;
-	void MoveSelectedPieceToCoordinates(sf::Vector2u target_coords) noexcept;
+	void MoveSelectedPieceToCoordinates(sf::Vector2u target_coords);
+	bool MoveIfValid(sf::Vector2u starting_coords, sf::Vector2u target_coords);
 
-	void CaptureAtCoordinates(sf::Vector2u coords) noexcept;
+	std::optional<Piece> CaptureAtCoordinates(sf::Vector2u coords) noexcept;
 
 	const Piece* GetPieceAtCoordinates(sf::Vector2u coords) const noexcept;
 	bool IsCoordinatesOccupied(const sf::Vector2u& coords) const noexcept;
@@ -43,12 +44,16 @@ public:
 	
 	inline bool IsCoordinatesSelected() const noexcept
 	{
-		return selected_coordinate_.has_value();
+		return selected_coordinates_.has_value();
 	}
 	
-	sf::Vector2f GetPositionFromCoordinates(const sf::Vector2u& coords) const noexcept;
+	sf::Vector2f GetPositionFromCoordinates(const sf::Vector2u& coords  ) const noexcept;
 	sf::Vector2u GetCoordinatesFromPosition(const sf::Vector2f& position) const noexcept;
-	bool         IsCoordinatesWithinBounds (const sf::Vector2u& coords) const noexcept;
+	bool         IsCoordinatesWithinBounds (const sf::Vector2u& coords  ) const noexcept;
+
+	bool IsKingInCheck(Team team) const noexcept;
+	void UpdateKingCoordinates(Team team, sf::Vector2u coords) noexcept;
+	void SwapPieceCoordinates(const sf::Vector2u& from, const sf::Vector2u& to);
 
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
@@ -62,7 +67,7 @@ private:
 	std::vector<Piece> inactive_white_pieces_{};	
 	std::vector<Piece> inactive_black_pieces_{};	
 
-	std::optional<sf::Vector2u> selected_coordinate_ {};
+	std::optional<sf::Vector2u> selected_coordinates_ {};
 
 	Team team_to_play_ = Team::White;
 

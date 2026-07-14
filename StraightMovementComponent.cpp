@@ -29,7 +29,7 @@ bool chess::StraightMovementComponent::IsPositionReachable(const sf::Vector2u& c
     return target_coords.x == current_coords.x || target_coords.y == current_coords.y;
 }
 
-bool chess::StraightMovementComponent::IsPositionBlocked(const sf::Vector2u& current_coords, const sf::Vector2u& target_coords, Board& board) const noexcept
+bool chess::StraightMovementComponent::IsPositionBlocked(const sf::Vector2u& current_coords, const sf::Vector2u& target_coords, const Board& board) const noexcept
 {
     auto is_vertical = target_coords.x == current_coords.x;
 

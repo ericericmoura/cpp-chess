@@ -18,9 +18,9 @@ public:
 	MovementComponent(Piece& piece);
 
 	virtual bool CanMoveTo(		 
-		Board& board,
+		const Board& board,
 		const sf::Vector2u& current_coords, 
-		const sf::Vector2u& target_coords) noexcept;
+		const sf::Vector2u& target_coords) const noexcept;
 
 	virtual void Moved(
 		const sf::Vector2u& previous_coords,
@@ -32,7 +32,7 @@ protected:
 	PieceType type_{};
 
 	virtual bool IsPositionReachable(const sf::Vector2u& current_coords, const sf::Vector2u& target_coords, bool occupied_by_enemy) const noexcept = 0;
-	virtual bool IsPositionBlocked  (const sf::Vector2u& current_coords, const sf::Vector2u& target_coords, Board& board) const noexcept = 0;
+	virtual bool IsPositionBlocked  (const sf::Vector2u& current_coords, const sf::Vector2u& target_coords, const Board& board) const noexcept = 0;
 };
 
 } // namespace chess

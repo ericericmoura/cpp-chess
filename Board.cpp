@@ -2,6 +2,8 @@
 
 #include <utility>
 #include <algorithm>
+#include <optional>
+#include <iostream>
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -12,6 +14,7 @@
 #include "BoardConfiguration.h"
 #include "Team.h"
 #include "PieceType.h"
+#include "BoardGraphicsComponent.h"
 
 chess::Board::Board(file_io::BoardConfiguration board_config) noexcept
 	: board_config_{board_config}
@@ -32,71 +35,113 @@ void chess::Board::SelectCoordinates(sf::Vector2u coords) noexcept
 	{
 		return;
 	}
-	selected_coordinate_ = coords;
+	selected_coordinates_ = coords;
 }
 
-void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords) noexcept
+void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
 {	
-	bool invalid_selected_coords_ = !selected_coordinate_.has_value() 
-									|| target_coords == selected_coordinate_
-									|| !IsCoordinatesWithinBounds(target_coords);
-	if (invalid_selected_coords_)
+	// Check if Piece is valid
+	bool is_selected_coords_valid = selected_coordinates_.has_value() 
+									&& target_coords != selected_coordinates_
+									&& IsCoordinatesWithinBounds(target_coords);
+	if (!is_selected_coords_valid)
 	{
 		return;
 	}	
-	auto it = active_pieces_.find(*selected_coordinate_);
-	auto previous_coords = selected_coordinate_.value();
-	selected_coordinate_ = {};
+	auto it = active_pieces_.find(selected_coordinates_.value());
+	
+	auto previous_selected_coords = selected_coordinates_.value();
+	selected_coordinates_ = {};
 
 	auto piece_team = it->second.GetTeam();
-	bool invalid_piece = it == active_pieces_.end() || it->second.GetTeam() != team_to_play_;
-	if (invalid_piece || !it->second.CanMoveTo(*this, target_coords))
+	bool is_piece_valid = it != active_pieces_.end() && it->second.GetTeam() == team_to_play_;
+	if (!is_piece_valid)
 	{
 		return;
 	}
-	CaptureAtCoordinates(target_coords);
+	if (!it->second.CanMoveTo(*this, target_coords))
+	{
+		return;
+	}
 
-	it->second.SetCoordinates(*this, target_coords);
-	it->second.Moved(*this, previous_coords);
-
+	// If the playing team's king is in check, changes are discarted
+	
+	// Move and Capture
+	
 	auto piece_type = it->second.GetPieceType();
-
-	auto node  = active_pieces_.extract(it);
-	node.key() = target_coords;
-	active_pieces_.insert(std::move(node));
+	bool moved = MoveIfValid(it->first, target_coords);
+	if (!moved)
+	{
+		return;
+	}
 
 	team_to_play_ = team_to_play_ == Team::White ? Team::Black : Team::White;
+
+	// Update Kings coordinates
 
 	if (piece_type != PieceType::King)
 	{
 		return;
 	}
-	if (piece_team == Team::Black)
-	{
-		black_king_coords_ = target_coords;
-		return;
-	}
-	white_king_coords_ = target_coords;
+	UpdateKingCoordinates(team_to_play_, target_coords);
 }
 
-void chess::Board::CaptureAtCoordinates(sf::Vector2u coords) noexcept
+bool chess::Board::MoveIfValid(sf::Vector2u starting_coords, sf::Vector2u target_coords)
 {
-	auto it_target = active_pieces_.find(coords);
-	if (it_target == active_pieces_.end())
-	{
-		return;
-	}
-	if (it_target->second.GetTeam() == chess::Team::White)
-	{
-		inactive_white_pieces_.emplace_back(std::move(it_target->second));
-	}
-	else
-	{
-		inactive_black_pieces_.emplace_back(std::move(it_target->second));
-	}
-	active_pieces_.erase(coords);
+	auto captured_piece = CaptureAtCoordinates(target_coords);
 
-	board_graphics_.UpdateCapturedPiecesPosition(*this, inactive_black_pieces_, inactive_white_pieces_);
+	SwapPieceCoordinates(starting_coords, target_coords);
+	
+	auto it = active_pieces_.find(target_coords);
+	if (it == active_pieces_.end())
+	{
+#ifdef _DEBUG
+		std::cout << "\nERROR while moving piece!";
+#endif // _DEBUG
+		return false;
+	}
+	it->second.SetCoordinates(*this, target_coords);
+
+	if (it->second.GetPieceType() == PieceType::King)
+	{
+		UpdateKingCoordinates(team_to_play_, target_coords);
+	}
+	if (!IsKingInCheck(team_to_play_))
+	{
+		it->second.Moved(*this, starting_coords);
+		return true;
+	}
+	SwapPieceCoordinates(target_coords, starting_coords);
+	it = active_pieces_.find(starting_coords);
+	if (it == active_pieces_.end())
+	{
+#ifdef _DEBUG
+		std::cout << "\nERROR while moving piece!";
+#endif // _DEBUG
+		return false;
+	}
+	it->second.SetCoordinates(*this, starting_coords);
+
+	if (captured_piece.has_value())
+	{
+		active_pieces_.try_emplace(target_coords, std::move(captured_piece.value()));
+	}
+	if (it->second.GetPieceType() == PieceType::King)
+	{
+		UpdateKingCoordinates(team_to_play_, starting_coords);
+	}
+	return false;
+}
+
+std::optional<chess::Piece> chess::Board::CaptureAtCoordinates(sf::Vector2u coords) noexcept
+{
+	std::optional<Piece> captured_piece;
+	if (active_pieces_.contains(coords))
+	{
+		captured_piece = std::move(active_pieces_.at(coords));
+		active_pieces_.erase(coords);
+	}	
+	return captured_piece;
 }
 
 const chess::Piece* chess::Board::GetPieceAtCoordinates(sf::Vector2u coords) const noexcept
@@ -144,6 +189,46 @@ sf::Vector2u chess::Board::GetCoordinatesFromPosition(const sf::Vector2f& positi
 bool chess::Board::IsCoordinatesWithinBounds(const sf::Vector2u& coords) const noexcept
 {	
 	return coords >= sf::Vector2u({0, 0}) && coords < board_config_.board_size_;
+}
+
+bool chess::Board::IsKingInCheck(Team team) const noexcept
+{
+	auto king_coords = team == Team::Black ? black_king_coords_ : white_king_coords_;
+	for (auto& [coords, piece] : active_pieces_)
+	{
+		if (piece.GetTeam() == team || coords == king_coords)
+		{
+			continue;
+		}
+		if (piece.CanMoveTo(*this, king_coords))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void chess::Board::UpdateKingCoordinates(Team team, sf::Vector2u coords) noexcept
+{
+	if (team == Team::Black)
+	{
+		black_king_coords_ = std::move(coords);
+		return;
+	}
+	white_king_coords_ = std::move(coords);
+}
+
+void chess::Board::SwapPieceCoordinates(const sf::Vector2u& from, const sf::Vector2u& to)
+{
+	auto it = active_pieces_.find(from);
+	if (it == active_pieces_.end())
+	{
+		return;
+	}
+	auto node = active_pieces_.extract(it);
+	node.key() = to;
+	active_pieces_.erase (to);
+	active_pieces_.insert(std::move(node));
 }
 
 void chess::Board::draw(sf::RenderTarget& target, sf::RenderStates states) const

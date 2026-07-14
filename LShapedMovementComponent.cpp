@@ -19,7 +19,7 @@ bool chess::LShapedMovementComponent::IsPositionReachable(const sf::Vector2u& cu
            distance_x == 1 && distance_y == 2;
 }
 
-bool chess::LShapedMovementComponent::IsPositionBlocked(const sf::Vector2u& current_coords, const sf::Vector2u& target_coords, Board& board) const noexcept
+bool chess::LShapedMovementComponent::IsPositionBlocked(const sf::Vector2u& current_coords, const sf::Vector2u& target_coords, const Board& board) const noexcept
 {
     return false;
 }

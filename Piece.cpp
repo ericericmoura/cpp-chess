@@ -28,7 +28,7 @@ void chess::Piece::AddMovementComponent(std::unique_ptr<MovementComponent> comp)
 	movement_components_.emplace_back(std::move(comp));
 }
 
-bool chess::Piece::CanMoveTo(Board& board, sf::Vector2u coords) noexcept
+bool chess::Piece::CanMoveTo(const Board& board, sf::Vector2u coords) const noexcept
 {
 	for (auto& comp : movement_components_)
 	{

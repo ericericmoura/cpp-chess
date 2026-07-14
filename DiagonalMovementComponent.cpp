@@ -24,7 +24,7 @@ bool chess::DiagonalMovementComponent::IsPositionReachable(const sf::Vector2u& c
     return is_diagonal && is_in_range;
 }
 
-bool chess::DiagonalMovementComponent::IsPositionBlocked(const sf::Vector2u& current_coords, const sf::Vector2u& target_coords, Board& board) const noexcept
+bool chess::DiagonalMovementComponent::IsPositionBlocked(const sf::Vector2u& current_coords, const sf::Vector2u& target_coords, const Board& board) const noexcept
 {
     auto direction = sf::Vector2i(target_coords) - sf::Vector2i(current_coords);
     direction.x /= abs(direction.x);

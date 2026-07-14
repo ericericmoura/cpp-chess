@@ -10,7 +10,7 @@ chess::MovementComponent::MovementComponent(Piece& piece)
     , type_(piece.GetPieceType())
 {}
 
-bool chess::MovementComponent::CanMoveTo(Board & board, const sf::Vector2u & current_pos, const sf::Vector2u & target_pos) noexcept
+bool chess::MovementComponent::CanMoveTo(const Board & board, const sf::Vector2u & current_pos, const sf::Vector2u & target_pos) const noexcept
 {    
     auto target_piece = board.GetPieceAtCoordinates(target_pos);
 
