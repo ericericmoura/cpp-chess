@@ -17,6 +17,8 @@ namespace chess
 class Engine
 {
 public:	
+	static inline sf::Vector2f local_mouse_position_{};
+
 	Engine() noexcept;
 	void Run();
 

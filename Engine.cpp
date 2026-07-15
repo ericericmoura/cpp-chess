@@ -6,6 +6,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/VideoMode.hpp>
+#include <SFML/Window/Mouse.hpp>
 
 #include "BitmapStore.h"
 #include "FileParser.h"
@@ -55,7 +56,10 @@ void chess::Engine::Run()
 }
 
 void chess::Engine::Update(float delta)
-{}
+{
+	local_mouse_position_ = window_.mapPixelToCoords(sf::Mouse::getPosition(), main_camera_);
+	chess_board_.Update(delta);
+}
 
 void chess::Engine::Render()
 {

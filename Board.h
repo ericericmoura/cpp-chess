@@ -57,12 +57,14 @@ public:
 	void UpdateKingCoordinates(Team team, sf::Vector2u coords) noexcept;
 	void SwapPieceCoordinates(const sf::Vector2u& from, const sf::Vector2u& to);
 
+	void Update(float delta) noexcept;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
 	StandardGraphicsComponent graphics_{};
-	BoardGraphicsComponent    board_graphics_{};
+	BoardGraphicsComponent    board_graphics_;
 	PieceFactory factory_{};
+
 	file_io::BoardConfiguration board_config_{};
 
 	PiecesMap active_pieces_{};

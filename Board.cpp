@@ -18,8 +18,10 @@
 
 chess::Board::Board(file_io::BoardConfiguration board_config) noexcept
 	: board_config_{board_config}
-	, graphics_    {board_config.texture_key_} 
-{}
+	, graphics_    {board_config.texture_key_} 	
+{
+	board_graphics_.Initialize(board_config_);
+}
 
 void chess::Board::GeneratePieces() noexcept
 {
@@ -36,6 +38,7 @@ void chess::Board::SelectCoordinates(sf::Vector2u coords) noexcept
 		return;
 	}
 	selected_coordinates_ = coords;
+	board_graphics_.UpdateSelectedCellPosition(*this, selected_coordinates_.value());
 }
 
 void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
@@ -47,11 +50,11 @@ void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
 	if (!is_selected_coords_valid)
 	{
 		return;
-	}	
-	auto it = active_pieces_.find(selected_coordinates_.value());
+	}
+	auto it = active_pieces_.find(selected_coordinates_.value());		
 	
-	auto previous_selected_coords = selected_coordinates_.value();
 	selected_coordinates_ = {};
+	board_graphics_.UpdateSelectedCellPosition(*this, {9, 9});
 
 	auto piece_team = it->second.GetTeam();
 	bool is_piece_valid = it != active_pieces_.end() && it->second.GetTeam() == team_to_play_;
@@ -59,15 +62,19 @@ void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
 	{
 		return;
 	}
+
+	auto target_it = active_pieces_.find(target_coords);
+	if (target_it != active_pieces_.end() && target_it->second.GetTeam() == team_to_play_)
+	{
+		SelectCoordinates(target_coords);
+		return;
+	}
 	if (!it->second.CanMoveTo(*this, target_coords))
 	{
 		return;
 	}
 
-	// If the playing team's king is in check, changes are discarted
-	
 	// Move and Capture
-	
 	auto piece_type = it->second.GetPieceType();
 	bool moved = MoveIfValid(it->first, target_coords);
 	if (!moved)
@@ -78,7 +85,6 @@ void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
 	team_to_play_ = team_to_play_ == Team::White ? Team::Black : Team::White;
 
 	// Update Kings coordinates
-
 	if (piece_type != PieceType::King)
 	{
 		return;
@@ -180,6 +186,8 @@ void chess::Board::SetConfig(file_io::BoardConfiguration config) noexcept
 {
 	board_config_ = config;	
 	graphics_.SetTextureKey(config.texture_key_);
+
+	board_graphics_.Initialize(board_config_);
 }
 
 const chess::file_io::BoardConfiguration& chess::Board::GetConfig() const noexcept
@@ -246,6 +254,47 @@ void chess::Board::SwapPieceCoordinates(const sf::Vector2u& from, const sf::Vect
 	node.key() = to;
 	active_pieces_.erase (to);
 	active_pieces_.insert(std::move(node));
+}
+
+void chess::Board::Update(float delta) noexcept
+{
+	board_graphics_.Update(*this);
+
+	if (!selected_coordinates_.has_value())
+	{
+		return;
+	}
+	auto it = active_pieces_.find(selected_coordinates_.value());
+	if (it != active_pieces_.end())
+	{	
+		std::string type_name{};
+		switch (active_pieces_.at(selected_coordinates_.value()).GetPieceType())
+		{
+		case chess::PieceType::Bishop:
+			type_name = "bishop";
+			break;
+		case chess::PieceType::Knight:
+			type_name = "knight";
+			break;
+		case chess::PieceType::Queen:
+			type_name = "queen";
+			break;
+		case chess::PieceType::Rook:
+			type_name = "rook";
+			break;
+		case chess::PieceType::Pawn:
+			type_name = "pawn";
+			break;
+		case chess::PieceType::King:
+			type_name = "king";
+			break;
+		default:
+			break;
+		}
+
+
+		std::cout << "\nSelected piece is a ´" << type_name << "´ at coordinates: (x: " << selected_coordinates_.value().x << "y: " << selected_coordinates_.value().y << ")";
+	}
 }
 
 void chess::Board::draw(sf::RenderTarget& target, sf::RenderStates states) const

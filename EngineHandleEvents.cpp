@@ -15,7 +15,7 @@ void chess::Engine::HandleEvent(sf::Event event)
 	{
 		if (mouse->button == sf::Mouse::Button::Left)
 		{
-			auto mouse_position = window_.mapPixelToCoords(mouse->position, main_camera_);
+			auto mouse_position       = window_.mapPixelToCoords(mouse->position, main_camera_);
 			auto board_mouse_position = chess_board_.GetCoordinatesFromPosition(mouse_position);
 
 			if (!chess_board_.IsCoordinatesSelected())

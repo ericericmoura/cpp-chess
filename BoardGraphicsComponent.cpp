@@ -4,11 +4,23 @@
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 
 #include "Piece.h"
 #include "Board.h"
 #include "Vector2Operators.h"
+#include "Engine.h"
+#include "BoardConfiguration.h"
+
+void chess::BoardGraphicsComponent::Initialize(file_io::BoardConfiguration& config)
+{
+	selected_cell_indicator_.setSize(sf::Vector2f(config.cell_size_));
+	selected_cell_indicator_.setFillColor(sf::Color(200.f, 0.f, 0.f, 255/2.f));
+
+	mouse_hovering_cell_indicator_.setSize(sf::Vector2f(config.cell_size_));
+	mouse_hovering_cell_indicator_.setFillColor(sf::Color(0.f, 0.f, 200.f, 255/2.f));
+}
 
 void chess::BoardGraphicsComponent::UpdateCapturedPiecesPosition(const Board& board, std::vector<Piece>& inactive_black_pieces, std::vector<Piece>& inactive_white_pieces) noexcept
 {
@@ -23,6 +35,16 @@ void chess::BoardGraphicsComponent::UpdateCapturedPiecesPosition(const Board& bo
 	black_pieces_offset.x = 0;
 	black_pieces_offset.y = board.GetConfig().margin_.y;
 	RepositionPieces(board, inactive_black_pieces, black_pieces_offset);
+}
+
+void chess::BoardGraphicsComponent::UpdateSelectedCellPosition(const Board& board, sf::Vector2u coords) noexcept
+{
+	selected_cell_indicator_.setPosition(board.GetPositionFromCoordinates(coords));
+}
+
+void chess::BoardGraphicsComponent::Update(const Board& board) noexcept
+{
+	mouse_hovering_cell_indicator_.setPosition(board.GetPositionFromCoordinates(board.GetCoordinatesFromPosition(Engine::local_mouse_position_)));
 }
 
 void chess::BoardGraphicsComponent::DrawPieces(
@@ -44,6 +66,9 @@ void chess::BoardGraphicsComponent::DrawPieces(
 	{
 		target.draw(piece, states);
 	}
+
+	target.draw(selected_cell_indicator_, states);
+	target.draw(mouse_hovering_cell_indicator_, states);
 }
 
 void chess::BoardGraphicsComponent::RepositionPieces(const Board& board, std::vector<Piece>& pieces, const sf::Vector2f& offset) noexcept
