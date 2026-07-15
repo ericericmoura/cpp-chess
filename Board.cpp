@@ -259,42 +259,6 @@ void chess::Board::SwapPieceCoordinates(const sf::Vector2u& from, const sf::Vect
 void chess::Board::Update(float delta) noexcept
 {
 	board_graphics_.Update(*this);
-
-	if (!selected_coordinates_.has_value())
-	{
-		return;
-	}
-	auto it = active_pieces_.find(selected_coordinates_.value());
-	if (it != active_pieces_.end())
-	{	
-		std::string type_name{};
-		switch (active_pieces_.at(selected_coordinates_.value()).GetPieceType())
-		{
-		case chess::PieceType::Bishop:
-			type_name = "bishop";
-			break;
-		case chess::PieceType::Knight:
-			type_name = "knight";
-			break;
-		case chess::PieceType::Queen:
-			type_name = "queen";
-			break;
-		case chess::PieceType::Rook:
-			type_name = "rook";
-			break;
-		case chess::PieceType::Pawn:
-			type_name = "pawn";
-			break;
-		case chess::PieceType::King:
-			type_name = "king";
-			break;
-		default:
-			break;
-		}
-
-
-		std::cout << "\nSelected piece is a ´" << type_name << "´ at coordinates: (x: " << selected_coordinates_.value().x << "y: " << selected_coordinates_.value().y << ")";
-	}
 }
 
 void chess::Board::draw(sf::RenderTarget& target, sf::RenderStates states) const
