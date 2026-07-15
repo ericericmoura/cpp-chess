@@ -10,10 +10,9 @@ void chess::ui::Container::Update(sf::Vector2u window_size)
 {
 	Element::Update(window_size);
 
-	// ALIGN EACH ELEMENT
+	// ALIGN EACH ELEMENT WITH THE CONTAINER
 	for (auto& element : elements_)
 	{
-
 	}
 }
 
