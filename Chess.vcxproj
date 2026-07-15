@@ -153,12 +153,13 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="BoardConfiguration.cpp" />
     <ClCompile Include="BoardGraphicsComponent.cpp" />
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Container.cpp" />
     <ClCompile Include="DiagonalMovementComponent.cpp" />
+    <ClCompile Include="Element.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="EngineRender.cpp" />
     <ClCompile Include="EngineHandleEvents.cpp" />
     <ClCompile Include="LShapedMovementComponent.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="PawnMovementComponent.cpp" />
     <ClCompile Include="Piece.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="BoardGraphicsComponent.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DiagonalMovementComponent.h" />
+    <ClInclude Include="UI\Element.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="GeneratedBoardInfo.h" />
@@ -183,6 +185,7 @@
     <ClInclude Include="GET_NAME.h" />
     <ClInclude Include="LShapedMovementComponent.h" />
     <ClInclude Include="MovementComponent.h" />
+    <ClInclude Include="UI\Container.h" />
     <ClInclude Include="PawnMovementComponent.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="PieceFactory.h" />
