@@ -11,11 +11,12 @@
 
 chess::ui::Text::Text(std::string_view font_key)
 	: text_(FontStore::GetInstance().GetFont(font_key.data()))
-{}
+{
+}
 
 void chess::ui::Text::SetFontKey(std::string_view font_key) noexcept
 {
-	text_.setFont(FontStore::GetInstance().GetFont(font_key.data()));
+	text_.setFont(FontStore::GetInstance().GetFont(font_key.data()));	
 }
 
 sf::Text& chess::ui::Text::GetText() noexcept
@@ -25,7 +26,6 @@ sf::Text& chess::ui::Text::GetText() noexcept
 
 void chess::ui::Text::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	Element::draw(target, states);
-
-	target.draw(text_);
+	states.transform *= GetTransform();
+	target.draw(text_, states);
 }

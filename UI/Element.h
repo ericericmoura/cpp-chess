@@ -5,6 +5,7 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
+#include <SFML/Graphics/Transform.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System/Vector2.hpp>
 
@@ -28,12 +29,14 @@ public:
 	sf::Vector2u GetPosition() const noexcept;
 	sf::Vector2u GetSize    () const noexcept;
 
+	const sf::Transform& GetTransform() const noexcept;
+
 	void SetOrigin(sf::Vector2f origin) noexcept;
 
 	virtual void Update(sf::Vector2u window_size);
 
 	// Inherited via sf::Drawable
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 
 private:
 	std::optional<sf::Vector2f> position_percentage_{};	

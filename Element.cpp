@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/Transform.hpp>
 #include <SFML/System/Vector2.hpp>
 
 #include "Vector2Operators.h"
@@ -56,6 +57,11 @@ sf::Vector2u chess::ui::Element::GetSize() const noexcept
 	return size_;
 }
 
+const sf::Transform& chess::ui::Element::GetTransform() const noexcept
+{
+	return getTransform();
+}
+
 void chess::ui::Element::SetOrigin(sf::Vector2f origin) noexcept
 {
 	setOrigin(origin);
@@ -71,9 +77,4 @@ void chess::ui::Element::Update(sf::Vector2u window_size)
 	{
 		SetSize(sf::Vector2u(size_percentage_.value() * sf::Vector2f(window_size)));
 	}
-}
-
-void chess::ui::Element::draw(sf::RenderTarget & target, sf::RenderStates states) const
-{
-	states.transform *= getTransform();
 }

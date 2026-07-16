@@ -39,10 +39,13 @@ chess::Engine::Engine() noexcept
 	chess_board_.SetConfig(board_config_);
 	chess_board_.GeneratePieces();
 
-	hud_text_.SetResponsivePosition({ .5f, .5f });
+	hud_text_.SetResponsivePosition({ .5f, .04f });
 	hud_text_.GetText().setString("White's turn!");
 	hud_text_.GetText().setCharacterSize(60);
-	hud_text_.GetText().setFillColor(sf::Color::Yellow);
+	hud_text_.GetText().setFillColor(sf::Color::White);
+	hud_text_.GetText().setOutlineThickness(3.f);
+	hud_text_.GetText().setOutlineColor(sf::Color::Black);
+	hud_text_.GetText().setOrigin(hud_text_.GetText().getGlobalBounds().size / 2.f);
 }
 
 void chess::Engine::Run()

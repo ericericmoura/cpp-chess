@@ -18,8 +18,7 @@ void chess::ui::Container::Update(sf::Vector2u window_size)
 
 void chess::ui::Container::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	Element::draw(target, states);
-
+	states.transform *= GetTransform();
 	for (auto& element : elements_)
 	{
 		target.draw(element, states);
