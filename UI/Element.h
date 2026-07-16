@@ -33,7 +33,7 @@ public:
 	virtual void Update(sf::Vector2u window_size);
 
 	// Inherited via sf::Drawable
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
 	std::optional<sf::Vector2f> position_percentage_{};	
