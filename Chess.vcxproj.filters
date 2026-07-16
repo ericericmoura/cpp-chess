@@ -118,10 +118,10 @@
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Text.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="FontStore.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -207,9 +207,12 @@
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="UI\Text.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="UI\FontStore.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Signal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

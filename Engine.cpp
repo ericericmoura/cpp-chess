@@ -40,7 +40,7 @@ chess::Engine::Engine() noexcept
 	chess_board_.GeneratePieces();
 
 	hud_text_.SetResponsivePosition({ .5f, .04f });
-	hud_text_.GetText().setString("White's turn!");
+	hud_text_.GetText().setString(constants::WhiteTurnText.data());
 	hud_text_.GetText().setCharacterSize(60);
 	hud_text_.GetText().setFillColor(sf::Color::White);
 	hud_text_.GetText().setOutlineThickness(3.f);
