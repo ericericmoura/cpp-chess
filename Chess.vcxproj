@@ -179,7 +179,7 @@
     <ClInclude Include="BoardGraphicsComponent.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DiagonalMovementComponent.h" />
-    <ClInclude Include="Signal.h" />
+    <ClInclude Include="Subject.h" />
     <ClInclude Include="UI\FontStore.h" />
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="UI\Element.h" />

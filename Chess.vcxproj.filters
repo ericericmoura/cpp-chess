@@ -212,7 +212,7 @@
     <ClInclude Include="UI\FontStore.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Signal.h">
+    <ClInclude Include="Subject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

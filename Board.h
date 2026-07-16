@@ -17,6 +17,8 @@
 #include "PieceFactory.h"
 #include "BoardConfiguration.h"
 #include "Team.h"
+#include "Subject.h"
+#include <functional>
 
 namespace chess {
 
@@ -27,6 +29,9 @@ class Board : public sf::Transformable, public sf::Drawable
 public:
 	Board() = default;
 	Board(file_io::BoardConfiguration board_config) noexcept;
+
+	unsigned int OnTurnChanged(std::function<void(Team)> observer);
+	void RemoveOnTurnChanged(unsigned int id);
 
 	void GeneratePieces() noexcept;	
 	
@@ -61,6 +66,8 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
+	Subject<Team> turn_changed_{};
+
 	StandardGraphicsComponent graphics_{};
 	BoardGraphicsComponent    board_graphics_;
 	PieceFactory factory_{};

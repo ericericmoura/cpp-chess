@@ -9,7 +9,7 @@ namespace chess
 {
 
 template <typename ...Args>
-class Signal
+class Subject
 {
 public:
 	unsigned int Subscribe(std::function<void(Args...)> observer)

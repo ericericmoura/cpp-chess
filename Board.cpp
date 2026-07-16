@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <optional>
 #include <iostream>
+#include <functional>
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -21,6 +22,16 @@ chess::Board::Board(file_io::BoardConfiguration board_config) noexcept
 	, graphics_    {board_config.texture_key_} 	
 {
 	board_graphics_.Initialize(board_config_);
+}
+
+unsigned int chess::Board::OnTurnChanged(std::function<void(Team)> observer)
+{
+	return turn_changed_.Subscribe(observer);
+}
+
+void chess::Board::RemoveOnTurnChanged(unsigned int id)
+{
+	turn_changed_.Remove(id);
 }
 
 void chess::Board::GeneratePieces() noexcept
@@ -83,6 +94,7 @@ void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
 	}
 
 	team_to_play_ = team_to_play_ == Team::White ? Team::Black : Team::White;
+	on_turn_change_.Notify(team_to_play_);
 
 	// Update Kings coordinates
 	if (piece_type != PieceType::King)
