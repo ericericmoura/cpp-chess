@@ -20,7 +20,7 @@ sf::Font& chess::ui::FontStore::GetFont(const std::string& key) const noexcept
 		if (!success || !inserted_it->second.openFromFile(key))
 		{
 #ifdef _DEBUG
-			std::cout << "Failed to find font by key `" << key << "`";
+			std::cout << "ERROR at FontStore: Failed to load font by key `" << key << "`";
 #endif // _DEBUG
 		}
 		return inserted_it->second;

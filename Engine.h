@@ -10,6 +10,7 @@
 #include "WindowConfiguration.h"
 #include "BoardConfiguration.h"
 #include "Board.h"
+#include "UI/Text.h"
 
 namespace chess
 {
@@ -33,9 +34,12 @@ private:
 	sf::RenderWindow window_{};
 	sf::VideoMode    current_video_mode_{};
 	sf::State	     window_status_{};
-	sf::View         main_camera_  {};
+	sf::View         main_camera_{};
+	sf::View         ui_camera_  {};
 
 	Board chess_board_{};
+
+	ui::Text hud_text_;
 
 	void InitializeCameraForChessBoard(const sf::Vector2u& display_size, sf::View& camera, file_io::BoardConfiguration& board_config) noexcept;
 	void CreateWindow() noexcept;

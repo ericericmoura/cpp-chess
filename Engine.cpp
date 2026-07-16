@@ -3,6 +3,7 @@
 #include <cassert>
 
 #include <SFML/Graphics/View.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window/VideoMode.hpp>
@@ -15,6 +16,7 @@
 #include "WindowConfiguration.h"
 
 chess::Engine::Engine() noexcept
+	: hud_text_(constants::MainFontPath)
 {
 	file_io::FileParser window_parser(constants::WindowSettingsPath);
 	auto window_config_opt = window_parser.GetBlueprint<file_io::WindowConfiguration>();
@@ -31,8 +33,16 @@ chess::Engine::Engine() noexcept
 	InitializeCameraForChessBoard(current_video_mode_.size, main_camera_, board_config_);
 	window_.setView(main_camera_);
 
+	ui_camera_.setSize  (sf::Vector2f(current_video_mode_.size));	
+	ui_camera_.setCenter(sf::Vector2f(current_video_mode_.size) / 2.f);
+
 	chess_board_.SetConfig(board_config_);
 	chess_board_.GeneratePieces();
+
+	hud_text_.SetResponsivePosition({ .5f, .5f });
+	hud_text_.GetText().setString("White's turn!");
+	hud_text_.GetText().setCharacterSize(60);
+	hud_text_.GetText().setFillColor(sf::Color::Yellow);
 }
 
 void chess::Engine::Run()
@@ -59,12 +69,19 @@ void chess::Engine::Update(float delta)
 {
 	local_mouse_position_ = window_.mapPixelToCoords(sf::Mouse::getPosition(), main_camera_);
 	chess_board_.Update(delta);
+	hud_text_.Update(current_video_mode_.size);
 }
 
 void chess::Engine::Render()
 {
 	window_.clear(window_config_.background_color_);
+
+	window_.setView(main_camera_);
 	window_.draw(chess_board_);
+
+	window_.setView(ui_camera_);
+	window_.draw(hud_text_);
+
 	window_.display();
 }
 
