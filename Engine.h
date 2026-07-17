@@ -14,6 +14,8 @@
 #include "UI/Text.h"
 #include "UI/Container.h"
 #include <SFML/Window/Mouse.hpp>
+#include "UI/Button.h"
+#include <SFML/System/Time.hpp>
 
 namespace chess
 {
@@ -21,7 +23,8 @@ namespace chess
 class Engine
 {
 public:	
-	static inline sf::Vector2f local_mouse_position_{};
+	inline static sf::Vector2f local_mouse_position_{};
+	inline static sf::Time elapsed_time_{};
 
 	Engine() noexcept;
 	void Run();
@@ -50,6 +53,7 @@ private:
 	ui::WidgetFactory widget_factory_{};
 	ui::Text hud_text_;
 	ui::Container promotion_container_{};
+	ui::Button    promotion_container_btn_{};
 
 	void InitializeCameraForChessBoard(const sf::Vector2u& display_size, sf::View& camera, file_io::BoardConfiguration& board_config) noexcept;
 	void CreateWindow() noexcept;

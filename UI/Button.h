@@ -3,6 +3,7 @@
 #include <functional>
 
 #include <SFML/System/Vector2.hpp>
+#include <SFML/System/Time.hpp>
 
 #include "Container.h"
 #include "../Subject.h"
@@ -23,6 +24,11 @@ public:
 
 private:
 	Subject<> clicked_{};
+
+	bool  can_click_ = true;
+	float click_delay_ = .2f;
+
+	sf::Time time_since_last_click_{};
 };
 
 } // namespace ui

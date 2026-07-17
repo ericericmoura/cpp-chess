@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Container.h"
+#include "Button.h"
 
 namespace chess
 {
@@ -11,6 +12,7 @@ class WidgetFactory
 {
 public:
 	Container CreatePromotionWidget();
+	Button    CreatePromotionWidgetBtn();
 };
 
 } // namespace ui
