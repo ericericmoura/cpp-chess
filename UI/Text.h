@@ -1,10 +1,9 @@
 #pragma once
 
-#include <string>
-
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <SFML/System/Vector2.hpp>
 
 #include <string_view>
 
@@ -24,6 +23,7 @@ public:
 	sf::Text& GetText() noexcept;
 
 	// Inherited via Element
+	virtual void Update(sf::Vector2u window_size);
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:

@@ -94,7 +94,7 @@ void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
 	}
 
 	team_to_play_ = team_to_play_ == Team::White ? Team::Black : Team::White;
-	on_turn_change_.Notify(team_to_play_);
+	turn_changed_.Notify(team_to_play_);
 
 	// Update Kings coordinates
 	if (piece_type != PieceType::King)

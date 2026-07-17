@@ -10,7 +10,9 @@
 #include "WindowConfiguration.h"
 #include "BoardConfiguration.h"
 #include "Board.h"
+#include "UI/WidgetFactory.h"
 #include "UI/Text.h"
+#include "UI/Container.h"
 
 namespace chess
 {
@@ -39,7 +41,9 @@ private:
 
 	Board chess_board_{};
 
+	ui::WidgetFactory widget_factory_{};
 	ui::Text hud_text_;
+	ui::Container promotion_container_{};
 
 	void InitializeCameraForChessBoard(const sf::Vector2u& display_size, sf::View& camera, file_io::BoardConfiguration& board_config) noexcept;
 	void CreateWindow() noexcept;

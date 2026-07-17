@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -13,21 +14,35 @@ namespace chess
 namespace ui
 {
 
-class Container : Element
+class Container : public Element
 {
 public:	
-	virtual void Update(sf::Vector2u window_size) override;
+	Container() = default;
+
+	Container(const Container&) = delete;
+	Container& operator=(const Container&) = delete;
+
+	Container(Container&&) = default;
+	Container& operator=(Container&&) = default;
+
+	void SetIsVertical(bool value) noexcept;
+	void SetSpacing(float value) noexcept;
+	void SetPadding(sf::Vector2u value) noexcept;
+
+	void AddElement(std::unique_ptr<Element> element) noexcept;
 
 	// Inherited via sf::Drawable
+	virtual void Update(sf::Vector2u window_size) override;
+
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-	std::vector<Element> elements_{};	
+	std::vector<std::unique_ptr<Element>> elements_{};
 
-	sf::Vector2u grid_   {};
-	sf::Vector2u margin_ {};
+	bool is_vertical_ = false;
+
+	float spacing_{};
 	sf::Vector2u padding_{};
-	sf::Vector2u spacing_{};
 };
 
 } // namespace ui

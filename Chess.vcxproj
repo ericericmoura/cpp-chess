@@ -169,6 +169,7 @@
     <ClCompile Include="StraightMovementComponent.cpp" />
     <ClCompile Include="StringToVector2.h" />
     <ClCompile Include="Text.cpp" />
+    <ClCompile Include="WidgetFactory.cpp" />
     <ClCompile Include="WindowConfiguration.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +202,7 @@
     <ClInclude Include="Team.h" />
     <ClInclude Include="Vector2Hash.h" />
     <ClInclude Include="Vector2Operators.h" />
+    <ClInclude Include="UI\WidgetFactory.h" />
     <ClInclude Include="WindowConfiguration.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

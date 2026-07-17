@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <vector>
 #include <optional>
+#include <functional>
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Drawable.hpp>
@@ -18,7 +19,6 @@
 #include "BoardConfiguration.h"
 #include "Team.h"
 #include "Subject.h"
-#include <functional>
 
 namespace chess {
 
