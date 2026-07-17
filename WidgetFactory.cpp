@@ -11,7 +11,7 @@ chess::ui::Container chess::ui::WidgetFactory::CreatePromotionWidget()
 {
     Container container{};
     container.SetResponsivePosition({.2f, .2f});
-    //container.SetIsVertical(true);
+    container.SetIsVertical(true);
     container.SetSpacing(10);
 
     auto text = std::make_unique<Text>(constants::MainFontPath);

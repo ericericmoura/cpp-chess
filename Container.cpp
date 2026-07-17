@@ -65,6 +65,14 @@ void chess::ui::Container::Update(sf::Vector2u window_size)
 	SetSize(std::move(container_size_));
 }
 
+void chess::ui::Container::HandleInput(sf::Vector2u mouse_pos)
+{
+	for (auto& element : elements_)
+	{
+		element->HandleInput(mouse_pos);
+	}
+}
+
 void chess::ui::Container::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	//states.transform *= GetTransform();

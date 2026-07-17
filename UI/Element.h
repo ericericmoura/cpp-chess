@@ -35,6 +35,9 @@ public:
 
 	virtual void Update(sf::Vector2u window_size);
 
+	virtual void HandleInput(sf::Vector2u mouse_pos) 
+	{};
+
 	// Inherited via sf::Drawable
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 

@@ -31,9 +31,9 @@ public:
 
 	void AddElement(std::unique_ptr<Element> element) noexcept;
 
-	// Inherited via sf::Drawable
+	// Inherited via Element
 	virtual void Update(sf::Vector2u window_size) override;
-
+	virtual void HandleInput(sf::Vector2u mouse_pos) override;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:

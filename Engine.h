@@ -13,6 +13,7 @@
 #include "UI/WidgetFactory.h"
 #include "UI/Text.h"
 #include "UI/Container.h"
+#include <SFML/Window/Mouse.hpp>
 
 namespace chess
 {
@@ -28,6 +29,11 @@ public:
 	void HandleEvent(sf::Event event);
 	void Update(float delta);
 	void Render();
+
+	sf::Vector2u GetMousePositionInUICoords()
+	{
+		return sf::Vector2u(window_.mapPixelToCoords(sf::Mouse::getPosition(), ui_camera_));
+	}
 
 private:
 	file_io::WindowConfiguration window_config_{};

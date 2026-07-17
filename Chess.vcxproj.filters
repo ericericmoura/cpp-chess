@@ -124,7 +124,10 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="WidgetFactory.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,8 +221,11 @@
     <ClInclude Include="Subject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UI\Button.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
     <ClInclude Include="UI\WidgetFactory.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\UI\HUD</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
