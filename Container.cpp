@@ -75,7 +75,6 @@ void chess::ui::Container::HandleInput(sf::Vector2u mouse_pos)
 
 void chess::ui::Container::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	//states.transform *= GetTransform();
 	for (auto& element : elements_)
 	{
 		target.draw(*element, states);

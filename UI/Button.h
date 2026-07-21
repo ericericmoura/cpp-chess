@@ -19,7 +19,7 @@ public:
 	unsigned int OnClicked(std::function<void()> observer);
 	void RemoveOnClicked(unsigned int id);
 
-	// Inherited via Element
+	// Inherited via Container
 	virtual void HandleInput(sf::Vector2u mouse_pos) override;
 
 private:

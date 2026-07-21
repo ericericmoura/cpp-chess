@@ -42,6 +42,8 @@ private:
 	bool is_vertical_ = false;
 
 	float spacing_{};
+
+protected:
 	sf::Vector2u padding_{};
 };
 

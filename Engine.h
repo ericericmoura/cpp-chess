@@ -1,21 +1,20 @@
 #pragma once
 
-#include <SFML/System/Vector2.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/View.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowEnums.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Mouse.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/View.hpp>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/System/Time.hpp>
 
+#include "UI/WidgetFactory.h"
+#include "UI/Text.h"
+#include "UI/ColorRect.h"
 #include "WindowConfiguration.h"
 #include "BoardConfiguration.h"
 #include "Board.h"
-#include "UI/WidgetFactory.h"
-#include "UI/Text.h"
-#include "UI/Container.h"
-#include <SFML/Window/Mouse.hpp>
-#include "UI/Button.h"
-#include <SFML/System/Time.hpp>
 
 namespace chess
 {
@@ -53,7 +52,7 @@ private:
 	ui::WidgetFactory widget_factory_{};
 	ui::Text hud_text_;
 	
-	ui::Container promotion_container_{};
+	ui::ColorRect promotion_container_;
 
 	void InitializeCameraForChessBoard(const sf::Vector2u& display_size, sf::View& camera, file_io::BoardConfiguration& board_config) noexcept;
 	void CreateWindow() noexcept;

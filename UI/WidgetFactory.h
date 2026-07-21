@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Container.h"
-#include "Button.h"
+#include "ColorRect.h"
 
 namespace chess
 {
@@ -12,7 +12,7 @@ class WidgetFactory
 {
 public:
 	Container CreatePromotionWidget();
-	Button    CreatePromotionWidgetBtn();
+	ColorRect CreatePromotionWidgetBtn();
 };
 
 } // namespace ui

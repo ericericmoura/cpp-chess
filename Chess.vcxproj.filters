@@ -132,6 +132,9 @@
     <ClCompile Include="TextureRect.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="ColorRect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Piece.h">
@@ -232,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="UI\TextureRect.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\ColorRect.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

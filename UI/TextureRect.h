@@ -17,13 +17,11 @@ class TextureRect : public Element
 public:
 	TextureRect(std::string_view texture_key);	
 
-	// Inherited via sf::Drawable
+	// Inherited via Element
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
 	std::string_view texture_key_{};
-
-	bool tiled_ = false;
 };
 
 } // namespace ui

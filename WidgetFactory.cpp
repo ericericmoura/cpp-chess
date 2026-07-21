@@ -9,6 +9,9 @@
 #include "UI/Button.h"
 #include "UI/TextureRect.h"
 #include "Constants.h"
+#include <SFML/Graphics/RectangleShape.hpp>
+#include "UI/ColorRect.h"
+#include <SFML/Graphics/Color.hpp>
 
 chess::ui::Container chess::ui::WidgetFactory::CreatePromotionWidget()
 {
@@ -37,12 +40,18 @@ chess::ui::Container chess::ui::WidgetFactory::CreatePromotionWidget()
     return container;
 }
 
-chess::ui::Button chess::ui::WidgetFactory::CreatePromotionWidgetBtn()
+chess::ui::ColorRect chess::ui::WidgetFactory::CreatePromotionWidgetBtn()
 {
-    Button container{};
+    sf::RectangleShape shape{};
+    shape.setFillColor(sf::Color(190, 189, 184));
+    shape.setOutlineThickness(2.f);
+    shape.setOutlineColor(sf::Color(34, 32, 33));
+
+    ColorRect container{std::move(shape)};
     container.SetResponsivePosition({ .2f, .2f });
     container.SetIsVertical(true);
     container.SetSpacing(10);
+    container.SetPadding({ 20, 25 });
 
     auto button_1  = std::make_unique<Button>();
     button_1->OnClicked([]() {
@@ -76,10 +85,18 @@ chess::ui::Button chess::ui::WidgetFactory::CreatePromotionWidgetBtn()
     texture_4->SetSize({ 75, 75 });
     button_4->AddElement(std::move(texture_4));
 
+    auto close_text = std::make_unique<Text>(constants::MainFontPath);
+    close_text->GetText().setString("close");
+    close_text->GetText().setCharacterSize(40);
+    close_text->GetText().setFillColor(sf::Color::Black);
+    close_text->GetText().setOutlineColor(sf::Color::White);
+    close_text->GetText().setOutlineThickness(4.f);
+
     container.AddElement(std::move(button_1));
     container.AddElement(std::move(button_2));
     container.AddElement(std::move(button_3));
     container.AddElement(std::move(button_4));
+    container.AddElement(std::move(close_text));
 
     return container;
 }
