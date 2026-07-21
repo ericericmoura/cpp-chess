@@ -35,7 +35,7 @@ public:
 
 	sf::Vector2u GetMousePositionInUICoords()
 	{
-		return sf::Vector2u(window_.mapPixelToCoords(sf::Mouse::getPosition(), ui_camera_));
+		return sf::Vector2u(window_.mapPixelToCoords(sf::Mouse::getPosition(window_), ui_camera_));
 	}
 
 private:
@@ -52,8 +52,8 @@ private:
 
 	ui::WidgetFactory widget_factory_{};
 	ui::Text hud_text_;
+	
 	ui::Container promotion_container_{};
-	ui::Button    promotion_container_btn_{};
 
 	void InitializeCameraForChessBoard(const sf::Vector2u& display_size, sf::View& camera, file_io::BoardConfiguration& board_config) noexcept;
 	void CreateWindow() noexcept;

@@ -33,7 +33,6 @@ void chess::ui::Button::HandleInput(sf::Vector2u mouse_pos)
 	auto is_hovering = bounds_.contains(mouse_pos);
 	if (is_hovering && sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 	{
-		std::cout << "Clicked!";
 		clicked_.Notify();
 
 		can_click_ = false;

@@ -44,7 +44,7 @@ void chess::BoardGraphicsComponent::UpdateSelectedCellPosition(const Board& boar
 
 void chess::BoardGraphicsComponent::Update(const Board& board) noexcept
 {
-	mouse_hovering_cell_indicator_.setPosition(board.GetPositionFromCoordinates(board.GetCoordinatesFromPosition(Engine::local_mouse_position_)));
+	mouse_hovering_cell_indicator_.setPosition(Engine::local_mouse_position_);
 }
 
 void chess::BoardGraphicsComponent::DrawPieces(

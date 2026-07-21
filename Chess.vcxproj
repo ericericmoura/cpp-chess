@@ -170,6 +170,7 @@
     <ClCompile Include="StraightMovementComponent.cpp" />
     <ClCompile Include="StringToVector2.h" />
     <ClCompile Include="Text.cpp" />
+    <ClCompile Include="TextureRect.cpp" />
     <ClCompile Include="WidgetFactory.cpp" />
     <ClCompile Include="WindowConfiguration.cpp" />
   </ItemGroup>
@@ -179,6 +180,7 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="BoardConfiguration.h" />
     <ClInclude Include="BoardGraphicsComponent.h" />
+    <ClInclude Include="UI\TextureRect.h" />
     <ClInclude Include="UI\Button.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DiagonalMovementComponent.h" />

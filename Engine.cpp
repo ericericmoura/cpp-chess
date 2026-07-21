@@ -67,8 +67,7 @@ chess::Engine::Engine() noexcept
 	hud_text_.GetText().setOutlineColor(sf::Color::Black);
 	hud_text_.GetText().setOrigin(hud_text_.GetText().getGlobalBounds().size / 2.f);
 
-	promotion_container_ = widget_factory_.CreatePromotionWidget();
-	promotion_container_btn_ = widget_factory_.CreatePromotionWidgetBtn();
+	promotion_container_ = widget_factory_.CreatePromotionWidgetBtn();
 }
 
 void chess::Engine::Run()
@@ -87,7 +86,7 @@ void chess::Engine::Run()
 		elapsed_time_ += time;
 		auto delta = time.asSeconds();
 
-		promotion_container_btn_.HandleInput(GetMousePositionInUICoords());
+		promotion_container_.HandleInput(GetMousePositionInUICoords());
 		Update(delta);
 		Render();		
 	}
@@ -95,10 +94,10 @@ void chess::Engine::Run()
 
 void chess::Engine::Update(float delta)
 {
-	local_mouse_position_ = window_.mapPixelToCoords(sf::Mouse::getPosition(), main_camera_);
+	local_mouse_position_ = window_.mapPixelToCoords(sf::Mouse::getPosition(window_), main_camera_);
 	chess_board_.Update(delta);
 	hud_text_.Update(current_video_mode_.size);
-	promotion_container_btn_.Update(current_video_mode_.size);
+	promotion_container_.Update(current_video_mode_.size);
 }
 
 void chess::Engine::Render()
@@ -110,7 +109,7 @@ void chess::Engine::Render()
 
 	window_.setView(ui_camera_);
 	window_.draw(hud_text_);
-	window_.draw(promotion_container_btn_);
+	window_.draw(promotion_container_);
 	window_.display();
 }
 

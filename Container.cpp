@@ -52,14 +52,14 @@ void chess::ui::Container::Update(sf::Vector2u window_size)
 		if (is_vertical_)
 		{
 			element_position.y += spacing_ + element->GetSize().y;
-			container_size_.y += spacing_ + element->GetSize().y;
-			container_size_.x = std::max(container_size_.x, element->GetSize().x);
+			container_size_ .y += spacing_ + element->GetSize().y;
+			container_size_ .x  = std::max(container_size_.x, element->GetSize().x);
 		}
 		else
 		{
 			element_position.x += spacing_ + element->GetSize().x;
-			container_size_.x += spacing_ + element->GetSize().x;
-			container_size_.y = std::max(container_size_.y, element->GetSize().y);
+			container_size_ .x += spacing_ + element->GetSize().x;
+			container_size_ .y  = std::max(container_size_.y, element->GetSize().y);
 		}
 	}
 	SetSize(std::move(container_size_));

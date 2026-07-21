@@ -129,6 +129,9 @@
     <ClCompile Include="Button.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="TextureRect.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Piece.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="UI\WidgetFactory.h">
       <Filter>Header Files\UI\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\TextureRect.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
