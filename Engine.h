@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/WindowEnums.hpp>
 #include <SFML/Window/Event.hpp>
@@ -52,7 +54,8 @@ private:
 	ui::WidgetFactory widget_factory_{};
 	ui::Text hud_text_;
 	
-	ui::ColorRect promotion_container_;
+	std::optional<ui::ColorRect> pawn_promotion_widget_;
+	bool pawn_promotion_widget_pending_deletion_ = false;
 
 	void InitializeCameraForChessBoard(const sf::Vector2u& display_size, sf::View& camera, file_io::BoardConfiguration& board_config) noexcept;
 	void CreateWindow() noexcept;

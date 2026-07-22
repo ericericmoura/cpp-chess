@@ -40,12 +40,14 @@ class PieceFactory
 {
 public:
 	GeneratedBoardInfo GeneratePieces(const Board& board, PiecesMap& map) const noexcept;
+	Piece GeneratePiece(const Board& board, const sf::Vector2u& coords, chess::Team team, PieceType type) const noexcept;
+
+	static std::string GetPieceTextureKey(Team team, PieceType piece_type) noexcept;
 
 private:
-	PiecesInformation pieces_info{};
+	static inline PiecesInformation pieces_info_{};
 
-	PieceType GetPieceType(const sf::Vector2u& coords) const noexcept;
-	Piece GeneratePiece(const Board& board, const sf::Vector2u& coords, chess::Team team) const noexcept;
+	PieceType GetPieceTypeFromCoords(const sf::Vector2u& coords) const noexcept;
 	void AttachComponentsForPiece(Piece& piece, chess::Team team, chess::PieceType type) const noexcept;
 };
 

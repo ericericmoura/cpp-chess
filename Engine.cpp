@@ -2,7 +2,8 @@
 
 #include <cassert>
 #include <string>
-#include <utility>
+#include <optional>
+#include <iostream>
 
 #include <SFML/Graphics/View.hpp>
 #include <SFML/Graphics/Color.hpp>
@@ -17,6 +18,7 @@
 #include "BoardConfiguration.h"
 #include "WindowConfiguration.h"
 #include "Team.h"
+#include "PieceType.h"
 
 chess::Engine::Engine() noexcept
 	: hud_text_(constants::MainFontPath)
@@ -67,7 +69,28 @@ chess::Engine::Engine() noexcept
 	hud_text_.GetText().setOutlineColor(sf::Color::Black);
 	hud_text_.GetText().setOrigin(hud_text_.GetText().getGlobalBounds().size / 2.f);
 
-	promotion_container_ = widget_factory_.CreatePromotionWidgetBtn();
+	chess_board_.OnPromotionWidgetRequested([this](auto team, auto pos)
+		{
+			auto translated_widget_position = window_.mapPixelToCoords(window_.mapCoordsToPixel(pos, main_camera_), ui_camera_);
+			translated_widget_position.x += 200;
+			if (team == Team::Black)
+			{
+				translated_widget_position.y -= 300;
+			}
+
+			auto coordinates = chess_board_.GetCoordinatesFromPosition(pos);
+
+			pawn_promotion_widget_ = widget_factory_.CreatePromotionWidget
+			(
+				team, 
+				translated_widget_position,
+				[this, coordinates]() { chess_board_.Promote(coordinates, PieceType::Knight); pawn_promotion_widget_pending_deletion_ = true; },
+				[this, coordinates]() { chess_board_.Promote(coordinates, PieceType::Bishop); pawn_promotion_widget_pending_deletion_ = true; },
+				[this, coordinates]() { chess_board_.Promote(coordinates, PieceType::Rook);   pawn_promotion_widget_pending_deletion_ = true; },
+				[this, coordinates]() { chess_board_.Promote(coordinates, PieceType::Queen);  pawn_promotion_widget_pending_deletion_ = true; });
+
+			std::cout << pawn_promotion_widget_.has_value();
+		});
 }
 
 void chess::Engine::Run()
@@ -86,9 +109,12 @@ void chess::Engine::Run()
 		elapsed_time_ += time;
 		auto delta = time.asSeconds();
 
-		promotion_container_.HandleInput(GetMousePositionInUICoords());
+		if (pawn_promotion_widget_.has_value())
+		{
+			pawn_promotion_widget_->HandleInput(GetMousePositionInUICoords());
+		}
 		Update(delta);
-		Render();		
+		Render();
 	}
 }
 
@@ -97,7 +123,17 @@ void chess::Engine::Update(float delta)
 	local_mouse_position_ = window_.mapPixelToCoords(sf::Mouse::getPosition(window_), main_camera_);
 	chess_board_.Update(delta);
 	hud_text_.Update(current_video_mode_.size);
-	promotion_container_.Update(current_video_mode_.size);
+
+	if (pawn_promotion_widget_.has_value())
+	{
+		pawn_promotion_widget_->Update(current_video_mode_.size);
+	}
+
+	if (pawn_promotion_widget_pending_deletion_)
+	{
+		pawn_promotion_widget_pending_deletion_ = false;
+		pawn_promotion_widget_ = {};
+	}
 }
 
 void chess::Engine::Render()
@@ -109,7 +145,10 @@ void chess::Engine::Render()
 
 	window_.setView(ui_camera_);
 	window_.draw(hud_text_);
-	window_.draw(promotion_container_);
+	if (pawn_promotion_widget_.has_value())
+	{
+		window_.draw(*pawn_promotion_widget_);
+	}
 	window_.display();
 }
 

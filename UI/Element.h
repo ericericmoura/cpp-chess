@@ -24,6 +24,7 @@ public:
 	void DisableResponsiveSize    () noexcept;
 	
 	void SetPosition(sf::Vector2u position) noexcept;
+	void SetPosition(sf::Vector2f position) noexcept;
 	void SetSize    (sf::Vector2u size    ) noexcept;
 	
 	sf::Vector2u GetPosition() const noexcept;

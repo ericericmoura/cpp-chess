@@ -44,7 +44,7 @@ void chess::BoardGraphicsComponent::UpdateSelectedCellPosition(const Board& boar
 
 void chess::BoardGraphicsComponent::Update(const Board& board) noexcept
 {
-	mouse_hovering_cell_indicator_.setPosition(Engine::local_mouse_position_);
+	mouse_hovering_cell_indicator_.setPosition(board.GetPositionFromCoordinates(board.GetCoordinatesFromPosition(Engine::local_mouse_position_)));
 }
 
 void chess::BoardGraphicsComponent::DrawPieces(
@@ -54,6 +54,8 @@ void chess::BoardGraphicsComponent::DrawPieces(
 	sf::RenderTarget& target, 
 	sf::RenderStates states) const
 {
+	target.draw(selected_cell_indicator_, states);
+
 	for (auto& [coords, piece] : active_pieces_map)
 	{
 		target.draw(piece, states);
@@ -67,7 +69,6 @@ void chess::BoardGraphicsComponent::DrawPieces(
 		target.draw(piece, states);
 	}
 
-	target.draw(selected_cell_indicator_, states);
 	target.draw(mouse_hovering_cell_indicator_, states);
 }
 

@@ -1,6 +1,7 @@
 #include "UI/TextureRect.h"
 
-#include <string_view>
+#include <string>
+#include <utility>
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -10,8 +11,8 @@
 #include "BitmapStore.h"
 #include "Vector2Operators.h"
 
-chess::ui::TextureRect::TextureRect(std::string_view texture_key)
-	: texture_key_(texture_key)
+chess::ui::TextureRect::TextureRect(std::string texture_key)
+	: texture_key_(std::move(texture_key))
 {}
 
 void chess::ui::TextureRect::draw(sf::RenderTarget& target, sf::RenderStates states) const

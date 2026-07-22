@@ -19,6 +19,7 @@
 #include "BoardConfiguration.h"
 #include "Team.h"
 #include "Subject.h"
+#include "PieceType.h"
 
 namespace chess {
 
@@ -32,6 +33,9 @@ public:
 
 	unsigned int OnTurnChanged(std::function<void(Team)> observer);
 	void RemoveOnTurnChanged(unsigned int id);
+
+	unsigned int OnPromotionWidgetRequested(std::function<void(Team, sf::Vector2f)> observer);
+	void RemoveOnPromotionWidgetRequested(unsigned int id);
 
 	void GeneratePieces() noexcept;	
 	
@@ -62,11 +66,17 @@ public:
 	void UpdateKingCoordinates(Team team, sf::Vector2u coords) noexcept;
 	void SwapPieceCoordinates(const sf::Vector2u& from, const sf::Vector2u& to);
 
+	void Promote(sf::Vector2u coords, PieceType target_piece) noexcept;
+
+	void FinishTurn() noexcept;
+
 	void Update(float delta) noexcept;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
 	Subject<Team> turn_changed_{};
+	Subject<Team, sf::Vector2f> promotion_widget_requested_{};
+	bool promoting_ = false;
 
 	StandardGraphicsComponent graphics_{};
 	BoardGraphicsComponent    board_graphics_;

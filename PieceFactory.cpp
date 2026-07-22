@@ -3,6 +3,7 @@
 #include <cmath>
 #include <memory>
 #include <utility>
+#include <string>
 
 #include <SFML/System/Vector2.hpp>
 
@@ -30,8 +31,11 @@ chess::GeneratedBoardInfo chess::PieceFactory::GeneratePieces(const Board& board
 		auto white_coords = black_coords;
 		white_coords.y += 6;
 
-		auto black_piece = GeneratePiece(board, black_coords, chess::Team::Black);
-		auto white_piece = GeneratePiece(board, white_coords, chess::Team::White);
+		auto black_type = GetPieceTypeFromCoords(black_coords);
+		auto white_type = GetPieceTypeFromCoords(white_coords);
+
+		auto black_piece = GeneratePiece(board, black_coords, chess::Team::Black, black_type);
+		auto white_piece = GeneratePiece(board, white_coords, chess::Team::White, white_type);
 
 		if (white_piece.GetPieceType() == PieceType::King)
 		{
@@ -47,7 +51,15 @@ chess::GeneratedBoardInfo chess::PieceFactory::GeneratePieces(const Board& board
 	return board_info;
 }
 
-chess::PieceType chess::PieceFactory::GetPieceType(const sf::Vector2u& coords) const noexcept
+std::string chess::PieceFactory::GetPieceTextureKey(Team team, PieceType piece_type) noexcept
+{
+	auto& team_name = team == chess::Team::White ? pieces_info_.white_team_name_ : pieces_info_.black_team_name_;
+	auto piece_path = pieces_info_.file_path_ + team_name + pieces_info_.piece_name_map_.at(piece_type) + pieces_info_.sprite_extension_;
+
+	return piece_path;
+}
+
+chess::PieceType chess::PieceFactory::GetPieceTypeFromCoords(const sf::Vector2u& coords) const noexcept
 {
 	if (coords.y == 1 || coords.y == 6)
 	{
@@ -76,14 +88,10 @@ chess::PieceType chess::PieceFactory::GetPieceType(const sf::Vector2u& coords) c
 	return PieceType::King;
 }
 
-chess::Piece chess::PieceFactory::GeneratePiece(const Board& board, const sf::Vector2u& coords, chess::Team team) const noexcept
-{
-	// Get type
-	auto type = GetPieceType(coords);
-	
+chess::Piece chess::PieceFactory::GeneratePiece(const Board& board, const sf::Vector2u& coords, chess::Team team, PieceType type) const noexcept
+{		
 	// Get image extension
-	auto& team_name = team == chess::Team::White ? pieces_info.white_team_name_ : pieces_info.black_team_name_;
-	auto piece_path = pieces_info.file_path_ + team_name + pieces_info.piece_name_map_.at(type) + pieces_info.sprite_extension_;
+	auto piece_path = GetPieceTextureKey(team, type);
 	auto piece = chess::Piece(team, piece_path);
 
 	piece.SetPieceType(type);

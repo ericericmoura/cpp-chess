@@ -42,6 +42,11 @@ void chess::ui::Element::SetPosition(sf::Vector2u position) noexcept
 	setPosition(sf::Vector2f(position));
 }
 
+void chess::ui::Element::SetPosition(sf::Vector2f position) noexcept
+{
+	setPosition(position);
+}
+
 void chess::ui::Element::SetSize(sf::Vector2u size) noexcept
 {
 	size_ = size;

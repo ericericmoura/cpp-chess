@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string_view>
+#include <string>
 
 #include <SFML/Graphics/RenderStates.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -15,13 +15,13 @@ namespace ui
 class TextureRect : public Element
 {
 public:
-	TextureRect(std::string_view texture_key);	
+	TextureRect(std::string texture_key);	
 
 	// Inherited via Element
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-	std::string_view texture_key_{};
+	std::string texture_key_{};
 };
 
 } // namespace ui

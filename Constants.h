@@ -2,6 +2,8 @@
 
 #include <string_view>
 
+#include <SFML/Graphics/Color.hpp>
+
 namespace chess
 {
 namespace constants
@@ -18,6 +20,10 @@ constexpr std::string_view BlackKnightTextureKey = "./graphics/black_knight.png"
 constexpr std::string_view BlackRookTextureKey   = "./graphics/black_rook.png";
 constexpr std::string_view BlackBishopTextureKey = "./graphics/black_bishop.png";
 constexpr std::string_view BlackQueenTextureKey  = "./graphics/black_queen.png";
+
+constexpr sf::Color BlackWidgetBackgroundColor{ 34 , 32 , 33  };
+constexpr sf::Color BlackWidgetOutlineColor   { 190, 189, 184 };
+constexpr float BlackWidgetOutlineThickness = 2.f;
 
 } // namespace constants
 } // namespace chess

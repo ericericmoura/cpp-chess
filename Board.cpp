@@ -34,6 +34,16 @@ void chess::Board::RemoveOnTurnChanged(unsigned int id)
 	turn_changed_.Remove(id);
 }
 
+unsigned int chess::Board::OnPromotionWidgetRequested(std::function<void(Team, sf::Vector2f)> observer)
+{
+	return promotion_widget_requested_.Subscribe(observer);
+}
+
+void chess::Board::RemoveOnPromotionWidgetRequested(unsigned int id)
+{
+	promotion_widget_requested_.Remove(id);
+}
+
 void chess::Board::GeneratePieces() noexcept
 {
 	auto info = factory_.GeneratePieces(*this, active_pieces_);
@@ -54,6 +64,11 @@ void chess::Board::SelectCoordinates(sf::Vector2u coords) noexcept
 
 void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
 {	
+	if (promoting_)
+	{
+		return;
+	}
+
 	// Check if Piece is valid
 	bool is_selected_coords_valid = selected_coordinates_.has_value() 
 									&& target_coords != selected_coordinates_
@@ -72,7 +87,7 @@ void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
 	if (!is_piece_valid)
 	{
 		return;
-	}
+	}	
 
 	auto target_it = active_pieces_.find(target_coords);
 	if (target_it != active_pieces_.end() && target_it->second.GetTeam() == team_to_play_)
@@ -93,8 +108,19 @@ void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
 		return;
 	}
 
-	team_to_play_ = team_to_play_ == Team::White ? Team::Black : Team::White;
-	turn_changed_.Notify(team_to_play_);
+	if (piece_type == PieceType::Pawn)
+	{
+		float promotion_coords_y = team_to_play_ == Team::White ? 0.f : 7.f;
+		if (target_coords.y == promotion_coords_y)
+		{
+			promoting_ = true;
+
+			promotion_widget_requested_.Notify(team_to_play_, GetPositionFromCoordinates(target_coords));
+			return;
+		}
+	}
+
+	FinishTurn();
 
 	// Update Kings coordinates
 	if (piece_type != PieceType::King)
@@ -266,6 +292,30 @@ void chess::Board::SwapPieceCoordinates(const sf::Vector2u& from, const sf::Vect
 	node.key() = to;
 	active_pieces_.erase (to);
 	active_pieces_.insert(std::move(node));
+}
+
+void chess::Board::Promote(sf::Vector2u coords, PieceType target_piece) noexcept
+{
+	if (target_piece == PieceType::Pawn || target_piece == PieceType::King)
+	{
+#ifdef _DEBUG
+		std::cout << "Invalid piece type!!";
+#endif // _DEBUG
+		return;
+	}
+	active_pieces_.erase(coords);
+	auto piece = factory_.GeneratePiece(*this, coords, team_to_play_, target_piece);
+	active_pieces_.try_emplace(coords, std::move(piece));
+
+	FinishTurn();
+
+	promoting_ = false;
+}
+
+void chess::Board::FinishTurn() noexcept
+{
+	team_to_play_ = team_to_play_ == Team::White ? Team::Black : Team::White;
+	turn_changed_.Notify(team_to_play_);	
 }
 
 void chess::Board::Update(float delta) noexcept
