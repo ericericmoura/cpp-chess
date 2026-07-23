@@ -16,6 +16,7 @@
 #include "Team.h"
 #include "PieceType.h"
 #include "BoardGraphicsComponent.h"
+#include "Constants.h"
 
 chess::Board::Board(file_io::BoardConfiguration board_config) noexcept
 	: board_config_{board_config}
@@ -92,6 +93,11 @@ void chess::Board::MoveSelectedPieceToCoordinates(sf::Vector2u target_coords)
 	auto target_it = active_pieces_.find(target_coords);
 	if (target_it != active_pieces_.end() && target_it->second.GetTeam() == team_to_play_)
 	{
+		if (target_it->second.GetPieceType() == PieceType::Rook && it->second.GetPieceType() == PieceType::King)
+		{
+			TryCastling(it->first, target_it->first);
+			return;
+		}
 		SelectCoordinates(target_coords);
 		return;
 	}
@@ -316,6 +322,103 @@ void chess::Board::FinishTurn() noexcept
 {
 	team_to_play_ = team_to_play_ == Team::White ? Team::Black : Team::White;
 	turn_changed_.Notify(team_to_play_);	
+}
+
+void chess::Board::TryCastling(const sf::Vector2u& king_coords, const sf::Vector2u& rook_coords) noexcept
+{
+	auto king_it = active_pieces_.find(king_coords);
+	auto rook_it = active_pieces_.find(rook_coords);
+	
+	if (   (king_it->second.GetTeam() == Team::White && white_castled_)
+		|| (king_it->second.GetTeam() == Team::Black && black_castled_))
+	{
+		return;
+	}
+
+	// Check if movement is valid
+	if ((king_it == active_pieces_.end() || king_it->second.GetPieceType() != PieceType::King) ||
+		(rook_it == active_pieces_.end() || rook_it->second.GetPieceType() != PieceType::Rook) ||
+		king_it->second.GetTeam() != rook_it->second.GetTeam())
+	{
+		return;
+	}
+	auto team = king_it->second.GetTeam();
+
+	auto king_start_coords = constants::BlackKingStartingCoordinates;
+
+	if (team == Team::White)
+	{
+		king_start_coords = constants::WhiteKingStartingCoordinates;
+	}
+
+	if (king_coords != king_start_coords)
+	{
+		return;
+	}
+
+	bool has_rook_moved = rook_coords.x != 0 && rook_coords.x != 7;
+
+	if (has_rook_moved)
+	{
+		return;
+	}
+
+	// Initialize target variables
+	auto king_target_x = king_coords.x;
+	auto rook_target_x = rook_coords.x;
+
+	auto start_x = king_coords.x + 1;
+	auto end_x   = rook_coords.x - 1;
+
+	if (king_coords.x > rook_coords.x)
+	{
+		start_x = rook_coords.x + 1;
+		end_x   = king_coords.x - 1;
+
+		king_target_x = king_coords.x - 2;
+		rook_target_x = king_target_x + 1;
+	}
+	else
+	{
+		king_target_x = king_coords.x + 2;
+		rook_target_x = king_target_x - 1;
+	}
+
+	// Check if nothing's on the way
+	for (auto x = start_x; x < end_x; ++x)
+	{
+		if (active_pieces_.contains({ x, king_coords.y }))
+		{
+			return;
+		}
+	}
+
+	// Move pieces
+	king_it->second.SetCoordinates(*this, { king_target_x, king_coords.y });
+	rook_it->second.SetCoordinates(*this, { rook_target_x, king_coords.y });
+
+	SwapPieceCoordinates(king_coords, { king_target_x, king_coords.y });
+	SwapPieceCoordinates(rook_coords, { rook_target_x, king_coords.y });
+
+	if (IsKingInCheck(Team::White))
+	{
+		king_it->second.SetCoordinates(*this, king_coords);
+		rook_it->second.SetCoordinates(*this, rook_coords);
+
+		SwapPieceCoordinates({ king_target_x, king_coords.y }, king_coords);
+		SwapPieceCoordinates({ rook_target_x, king_coords.y }, rook_coords);
+
+		return;
+	}
+	if (team == Team::White)
+	{
+		white_castled_ = true;
+	}
+	else
+	{
+		black_castled_ = true;
+	}
+	FinishTurn();
 }
 
 void chess::Board::Update(float delta) noexcept

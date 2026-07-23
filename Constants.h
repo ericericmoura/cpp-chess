@@ -3,6 +3,7 @@
 #include <string_view>
 
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/System/Vector2.hpp>
 
 namespace chess
 {
@@ -24,6 +25,9 @@ constexpr std::string_view BlackQueenTextureKey  = "./graphics/black_queen.png";
 constexpr sf::Color BlackWidgetBackgroundColor{ 34 , 32 , 33  };
 constexpr sf::Color BlackWidgetOutlineColor   { 190, 189, 184 };
 constexpr float BlackWidgetOutlineThickness = 2.f;
+
+constexpr sf::Vector2u WhiteKingStartingCoordinates = { 4, 7 };
+constexpr sf::Vector2u BlackKingStartingCoordinates = { 4, 0 };
 
 } // namespace constants
 } // namespace chess

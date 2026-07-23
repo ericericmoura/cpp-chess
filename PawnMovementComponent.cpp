@@ -1,6 +1,7 @@
 #include "PawnMovementComponent.h"
 
 #include <cmath>
+#include <utility>
 
 #include <SFML/System/Vector2.hpp>
 
@@ -10,7 +11,6 @@
 #include "Team.h"
 #include "PieceType.h"
 #include "Board.h"
-#include <utility>
 
 chess::PawnMovementComponent::PawnMovementComponent(Piece& piece)
     : StraightMovementComponent(piece, 2)
