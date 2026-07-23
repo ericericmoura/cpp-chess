@@ -140,24 +140,26 @@ bool chess::Board::MoveIfValid(sf::Vector2u starting_coords, sf::Vector2u target
 {
 	auto captured_piece = CaptureAtCoordinates(target_coords);
 
-	SwapPieceCoordinates(starting_coords, target_coords);
-	
-	auto it = active_pieces_.find(target_coords);
+	auto it = active_pieces_.find(starting_coords);
 	if (it == active_pieces_.end())
 	{
 #ifdef _DEBUG
-		std::cout << "\nERROR while moving piece!";
+		std::cout << "\nERROR while finding selected piece!";
 #endif // _DEBUG
 		return false;
 	}
-	it->second.SetCoordinates(*this, target_coords);
+	auto piece_type = it->second.GetPieceType();
+	auto piece_team = it->second.GetTeam();
 
-	if (it->second.GetPieceType() == PieceType::King)
+	SwapPieceCoordinates(starting_coords, target_coords);
+
+	if (piece_type == PieceType::King)
 	{
 		UpdateKingCoordinates(team_to_play_, target_coords);
 	}
 	if (!IsKingInCheck(team_to_play_))
 	{
+		it = active_pieces_.find(target_coords);
 		it->second.Moved(*this, starting_coords);
 		if (captured_piece.has_value())
 		{
@@ -166,22 +168,21 @@ bool chess::Board::MoveIfValid(sf::Vector2u starting_coords, sf::Vector2u target
 		return true;
 	}
 	SwapPieceCoordinates(target_coords, starting_coords);
-	it = active_pieces_.find(starting_coords);
-	if (it == active_pieces_.end())
-	{
-#ifdef _DEBUG
-		std::cout << "\nERROR while moving piece!";
-#endif // _DEBUG
-		return false;
-	}
-	it->second.SetCoordinates(*this, starting_coords);
 
 	if (captured_piece.has_value())
 	{
 		active_pieces_.try_emplace(target_coords, std::move(captured_piece.value()));
 	}
-	if (it->second.GetPieceType() == PieceType::King)
+	if (piece_type == PieceType::King)
 	{
+		if (piece_team == Team::White)
+		{
+			white_king_moved_ = true;
+		}
+		else
+		{
+			black_king_moved_ = true;
+		}
 		UpdateKingCoordinates(team_to_play_, starting_coords);
 	}
 	return false;
@@ -298,6 +299,16 @@ void chess::Board::SwapPieceCoordinates(const sf::Vector2u& from, const sf::Vect
 	node.key() = to;
 	active_pieces_.erase (to);
 	active_pieces_.insert(std::move(node));
+
+	auto ending_it = active_pieces_.find(to);
+	if (ending_it == active_pieces_.end())
+	{
+#ifdef _DEBUG
+		std::cerr << "\nError while moving piece!";
+#endif // _DEBUG
+		return;
+	}
+	ending_it->second.SetCoordinates(*this, to);
 }
 
 void chess::Board::Promote(sf::Vector2u coords, PieceType target_piece) noexcept
@@ -324,13 +335,21 @@ void chess::Board::FinishTurn() noexcept
 	turn_changed_.Notify(team_to_play_);	
 }
 
-void chess::Board::TryCastling(const sf::Vector2u& king_coords, const sf::Vector2u& rook_coords) noexcept
-{
+void chess::Board::TryCastling(const sf::Vector2u king_coords, const sf::Vector2u rook_coords) noexcept
+{	
 	auto king_it = active_pieces_.find(king_coords);
 	auto rook_it = active_pieces_.find(rook_coords);
+
+	auto team = king_it->second.GetTeam();
 	
-	if (   (king_it->second.GetTeam() == Team::White && white_castled_)
-		|| (king_it->second.GetTeam() == Team::Black && black_castled_))
+	if (   (team == Team::White && white_castled_)
+		|| (team == Team::Black && black_castled_))
+	{
+		return;
+	}
+
+	if (   (team == Team::White && white_king_moved_)
+		|| (team == Team::Black && black_king_moved_))
 	{
 		return;
 	}
@@ -339,19 +358,6 @@ void chess::Board::TryCastling(const sf::Vector2u& king_coords, const sf::Vector
 	if ((king_it == active_pieces_.end() || king_it->second.GetPieceType() != PieceType::King) ||
 		(rook_it == active_pieces_.end() || rook_it->second.GetPieceType() != PieceType::Rook) ||
 		king_it->second.GetTeam() != rook_it->second.GetTeam())
-	{
-		return;
-	}
-	auto team = king_it->second.GetTeam();
-
-	auto king_start_coords = constants::BlackKingStartingCoordinates;
-
-	if (team == Team::White)
-	{
-		king_start_coords = constants::WhiteKingStartingCoordinates;
-	}
-
-	if (king_coords != king_start_coords)
 	{
 		return;
 	}
@@ -394,19 +400,20 @@ void chess::Board::TryCastling(const sf::Vector2u& king_coords, const sf::Vector
 	}
 
 	// Move pieces
-	king_it->second.SetCoordinates(*this, { king_target_x, king_coords.y });
-	rook_it->second.SetCoordinates(*this, { rook_target_x, king_coords.y });
+	sf::Vector2u target_king_coords = { king_target_x, king_coords.y };
+	sf::Vector2u target_rook_coords = { rook_target_x, king_coords.y };
 
-	SwapPieceCoordinates(king_coords, { king_target_x, king_coords.y });
-	SwapPieceCoordinates(rook_coords, { rook_target_x, king_coords.y });
+	SwapPieceCoordinates(king_coords, target_king_coords);
+	SwapPieceCoordinates(rook_coords, target_rook_coords);
 
-	if (IsKingInCheck(Team::White))
-	{
-		king_it->second.SetCoordinates(*this, king_coords);
-		rook_it->second.SetCoordinates(*this, rook_coords);
+	UpdateKingCoordinates(team, target_king_coords);
 
-		SwapPieceCoordinates({ king_target_x, king_coords.y }, king_coords);
-		SwapPieceCoordinates({ rook_target_x, king_coords.y }, rook_coords);
+	if (IsKingInCheck(team))
+	{	
+		SwapPieceCoordinates(target_king_coords, king_coords);
+		SwapPieceCoordinates(target_rook_coords, rook_coords);
+
+		UpdateKingCoordinates(team, king_coords);
 
 		return;
 	}

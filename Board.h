@@ -69,7 +69,7 @@ public:
 	void Promote(sf::Vector2u coords, PieceType target_piece) noexcept;
 	void FinishTurn() noexcept;
 
-	void TryCastling(const sf::Vector2u& coords, const sf::Vector2u& target_coords) noexcept;
+	void TryCastling(const sf::Vector2u coords, const sf::Vector2u target_coords) noexcept;
 
 	void Update(float delta) noexcept;
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -98,6 +98,9 @@ private:
 
 	bool white_castled_ = false;
 	bool black_castled_ = false;
+
+	bool white_king_moved_ = false;
+	bool black_king_moved_ = false;
 };
 
 } // namespace chess
