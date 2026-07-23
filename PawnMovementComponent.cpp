@@ -34,7 +34,7 @@ bool chess::PawnMovementComponent::IsPositionReachable(const sf::Vector2u& curre
     }
     auto distance_x = static_cast<int>(target_coords.x - current_coords.x);
 
-    return abs(distance_x) == abs(distance_y);
+    return abs(distance_x) == 1 && abs(distance_x) == abs(distance_y);
 }
 
 void chess::PawnMovementComponent::AllowEnPassant(const Board& board, sf::Vector2u at_pos) noexcept
