@@ -159,6 +159,18 @@ bool chess::Board::MoveIfValid(sf::Vector2u starting_coords, sf::Vector2u target
 	}
 	if (!IsKingInCheck(team_to_play_))
 	{
+		if (piece_type == PieceType::King)
+		{
+			if (piece_team == Team::White)
+			{
+				white_king_moved_ = true;
+			}
+			else
+			{
+				black_king_moved_ = true;
+			}
+		}
+
 		it = active_pieces_.find(target_coords);
 		it->second.Moved(*this, starting_coords);
 		if (captured_piece.has_value())
@@ -174,15 +186,7 @@ bool chess::Board::MoveIfValid(sf::Vector2u starting_coords, sf::Vector2u target
 		active_pieces_.try_emplace(target_coords, std::move(captured_piece.value()));
 	}
 	if (piece_type == PieceType::King)
-	{
-		if (piece_team == Team::White)
-		{
-			white_king_moved_ = true;
-		}
-		else
-		{
-			black_king_moved_ = true;
-		}
+	{		
 		UpdateKingCoordinates(team_to_play_, starting_coords);
 	}
 	return false;
@@ -264,13 +268,19 @@ bool chess::Board::IsCoordinatesWithinBounds(const sf::Vector2u& coords) const n
 bool chess::Board::IsKingInCheck(Team team) const noexcept
 {
 	auto king_coords = team == Team::Black ? black_king_coords_ : white_king_coords_;
+
+	return IsCoordsAttacked(king_coords, team);
+}
+
+bool chess::Board::IsCoordsAttacked(const sf::Vector2u& target_coords, Team team) const noexcept
+{
 	for (auto& [coords, piece] : active_pieces_)
 	{
-		if (piece.GetTeam() == team || coords == king_coords)
+		if (piece.GetTeam() == team || coords == target_coords)
 		{
 			continue;
 		}
-		if (piece.CanMoveTo(*this, king_coords))
+		if (piece.CanMoveTo(*this, target_coords))
 		{
 			return true;
 		}
@@ -408,7 +418,7 @@ void chess::Board::TryCastling(const sf::Vector2u king_coords, const sf::Vector2
 
 	UpdateKingCoordinates(team, target_king_coords);
 
-	if (IsKingInCheck(team))
+	if (IsKingInCheck(team) || IsCoordsAttacked(target_rook_coords, team))
 	{	
 		SwapPieceCoordinates(target_king_coords, king_coords);
 		SwapPieceCoordinates(target_rook_coords, rook_coords);

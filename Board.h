@@ -63,6 +63,8 @@ public:
 	bool         IsCoordinatesWithinBounds (const sf::Vector2u& coords  ) const noexcept;
 
 	bool IsKingInCheck(Team team) const noexcept;
+	bool IsCoordsAttacked(const sf::Vector2u& target_coords, Team team) const noexcept;
+
 	void UpdateKingCoordinates(Team team, sf::Vector2u coords) noexcept;
 	void SwapPieceCoordinates(const sf::Vector2u& from, const sf::Vector2u& to);
 
